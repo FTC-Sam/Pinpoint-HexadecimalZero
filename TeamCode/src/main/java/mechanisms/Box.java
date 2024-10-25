@@ -1,0 +1,47 @@
+package mechanisms;
+
+import com.qualcomm.robotcore.hardware.CRServoImplEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+public class Box {
+    private final Telemetry telemetry;
+    private final CRServoImplEx spin;
+    private final ServoImplEx hinge;
+
+    public Box(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.telemetry = telemetry;
+
+        spin = (CRServoImplEx) hardwareMap.servo.get("spin");
+        hinge = (ServoImplEx) hardwareMap.servo.get("hinge");
+
+    }
+
+    public void rest() {
+        spin.setPower(0.1);
+        hinge.setPosition(0.431);
+    }
+
+    public void intake() {
+        hinge.setPosition(0.559);
+        spin.setPower(1);
+    }
+
+    public void outtake() {
+        hinge.setPosition(0.559);
+        spin.setPower(-1);
+    }
+
+    public void depositPosition() {
+        hinge.setPosition(1);
+    }
+    public void deposit() {
+        spin.setPower(-0.5);
+    }
+
+    public boolean isDepositPosition() {
+        return hinge.getPosition() == 1;
+    }
+}
