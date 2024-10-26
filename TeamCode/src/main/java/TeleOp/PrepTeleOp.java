@@ -62,12 +62,13 @@ public class PrepTeleOp extends LinearOpMode {
             /*drivetrain.drive();
             if (gamepad1.a) spin.setPower(-1);
             else if (gamepad1.b) spin.setPower(1);
-            else spin.setPower(0);
+            else spin.setPower(0);*/
+
             if (gamepad1.x) hinge.setPosition(0.431);
 
             if (gamepad1.y) hinge.setPosition(0.559); //0.559 intake
             //0.431 rest
-               */
+
             /*if (gamepad1.dpad_up) {
                 servoLeft.setPosition(1);
                 servoRight.setPosition(1);

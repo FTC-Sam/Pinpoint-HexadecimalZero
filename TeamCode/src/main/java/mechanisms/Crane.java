@@ -132,7 +132,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         }
     }
 
-    public void deposit() {
+    public void deposit() { //gamepad2 a
         if (gamepad2.a) {
             if (currentDepositState == DepositState.SAMPLE) {
                 box.deposit();
