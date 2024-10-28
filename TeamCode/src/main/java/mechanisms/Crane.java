@@ -9,18 +9,18 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Crane { //I got rid of hardwareMap variable and wanna try it as a disposable
                      //constructor variable since it's only needed during initialization
-    private final Telemetry telemetry;
-    public final Box box;
-    public final HoriSlides horiSlides;
-    public final VertiSlides vertiSlides;
-    private final Gamepad gamepad1;
-    private final Gamepad gamepad2;
-    private final int down = 0;
-    private final int lowBucket = 1000;
-    private final int highBucket = 2000;
-    private final int lowBar = 500;
-    private final int highBar = 1500;
-    private final int climbHeight = 2000;
+    private Telemetry telemetry;
+    public Box box;
+    public HoriSlides horiSlides;
+    public VertiSlides vertiSlides;
+    private Gamepad gamepad1;
+    private Gamepad gamepad2;
+    private int down = 50;
+    private int lowBucket = 2000;
+    private int highBucket = 4000;
+    private int lowBar = 500;
+    private int highBar = 1500;
+    private int climbHeight = 2000;
     private boolean isVertiManual = false; //stop pid when it's manual
     private enum CraneStates{
         EXTENSION,
@@ -31,13 +31,13 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         SAMPLE,
         SPECIMEN
     }
-    private final ElapsedTime timer1 = new ElapsedTime();
-    private final ElapsedTime timer2 = new ElapsedTime();
+    private ElapsedTime timer1 = new ElapsedTime();
+    private ElapsedTime timer2 = new ElapsedTime();
 
     CraneStates currentState = CraneStates.GROUND;
     public DepositState currentDepositState = DepositState.SAMPLE;
-    private final double horiThreshold = 0.1;
-    private final int vertiThreshold = 2000;
+    private double horiThreshold = 0;
+    private int vertiThreshold = 2000;
 
 
     public Crane(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
@@ -62,6 +62,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             case EXTENSION:
                 setArm(); //set arm preset according to slide auto preset, doesn't happen if slide position is set manually
                 deposit();
+                break;
 
 
         }
@@ -100,6 +101,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             }
             if (gamepad2.dpad_down) {
                 vertiSlides.setTargetPos(down);
+                currentState = CraneStates.GROUND;
             }
         }
     }
@@ -127,7 +129,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         if (currentDepositState == DepositState.SAMPLE) { //can add and here to threshold arm flipping
             box.depositPosition();
         }
-        if (vertiSlides.getTargetPos() == down) {
+        if ((vertiSlides.getTargetPos() == down) || currentDepositState == DepositState.SPECIMEN) {
             box.rest();
         }
     }
@@ -161,10 +163,10 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         }
     }
     public void boxTake() { //gamepad1 a, x
-        if ((horiSlides.getPosition() >= horiThreshold) && gamepad1.a && timer2.seconds() > 0.3) {
+        if ((horiSlides.getPosition() <= horiThreshold) && gamepad1.a && timer2.seconds() > 0.3) {
             box.intake();
         }
-        else if ((horiSlides.getPosition() >= horiThreshold) && gamepad1.x && timer2.seconds() > 0.3) {
+        else if ((horiSlides.getPosition() <= horiThreshold) && gamepad1.x && timer2.seconds() > 0.3) {
             box.outtake();
         }
         else {
@@ -179,7 +181,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             timer1.startTime();
         }
         else if (gamepad2.y) {
-            horiSlides.setPosition(horiThreshold);
+            horiSlides.out();
             timer2.reset();
             timer2.startTime();
         }

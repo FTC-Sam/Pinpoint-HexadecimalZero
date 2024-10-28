@@ -8,14 +8,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class HoriSlides {
 
-    private final ServoImplEx servoLeft;
-    private final ServoImplEx servoRight;
-    private final Telemetry telemetry;
+    private ServoImplEx servoLeft;
+    private ServoImplEx servoRight;
+    private Telemetry telemetry;
     public HoriSlides(HardwareMap hardwareMap, Telemetry telemetry) {
         servoLeft = (ServoImplEx) hardwareMap.servo.get("servoLeft");
         servoRight = (ServoImplEx) hardwareMap.servo.get("servoRight");
         servoRight.setDirection(Servo.Direction.REVERSE);
         this.telemetry = telemetry;
+        in();
     }
 
     public void manualIn() {
@@ -29,16 +30,16 @@ public class HoriSlides {
     }
 
     public void out() {
-        servoLeft.setPosition(1);
-        servoRight.setPosition(1);
+        servoLeft.setPosition(-0.7);
+        servoRight.setPosition(-0.7);
     }
     public void in() {
-        servoLeft.setPosition(0);
-        servoRight.setPosition(0);
+        servoLeft.setPosition(0.8);
+        servoRight.setPosition(0.8);
     }
 
     public boolean isReset() {
-        return servoLeft.getPosition() == 0;
+        return servoLeft.getPosition() == 0.8;
     }
 
     public double getPosition() {

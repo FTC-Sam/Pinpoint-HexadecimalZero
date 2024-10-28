@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Drivetrain {
-    private final DcMotorEx motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight;
-    private final Gamepad gamepad1;
-    private final Telemetry telemetry;
+    private DcMotorEx motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight;
+    private Gamepad gamepad1;
+    private Telemetry telemetry;
 
     public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad) {
 

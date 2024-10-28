@@ -1,6 +1,8 @@
 package TeleOp;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
@@ -10,6 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import mechanisms.Drivetrain;
+import mechanisms.VertiSlides;
 
 
 @TeleOp(name = "PrepTeleOp")
@@ -25,8 +28,13 @@ public class PrepTeleOp extends LinearOpMode {
 
     private ServoImplEx servoLeft;
     private ServoImplEx servoRight;
-    private DcMotorEx slideLeft;
-    private DcMotorEx slideRight;
+    private VertiSlides vertiSlides;
+
+    public static double servoIn = 0.8;
+    public static double servoOut = -0.7;
+
+    public static double servoUp = 0.5;
+    public static double servoDown = 0.2;
 
 
 
@@ -42,12 +50,10 @@ public class PrepTeleOp extends LinearOpMode {
         servoRight.setDirection(Servo.Direction.REVERSE);
 
 
-        slideLeft = (DcMotorEx) hardwareMap.dcMotor.get("slideLeft");
-        slideRight = (DcMotorEx) hardwareMap.dcMotor.get("slideRight");
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        slideLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        slideRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        slideRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        vertiSlides = new VertiSlides(hardwareMap, telemetry);
     }
 
 
@@ -55,42 +61,45 @@ public class PrepTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
         initialize();
         while (opModeInInit()) {
         }
         while (opModeIsActive()) {
-            /*drivetrain.drive();
+            drivetrain.drive();
             if (gamepad1.a) spin.setPower(-1);
             else if (gamepad1.b) spin.setPower(1);
-            else spin.setPower(0);*/
+            else spin.setPower(0);
 
-            if (gamepad1.x) hinge.setPosition(0.431);
+            if (gamepad1.x) hinge.setPosition(servoUp);
 
-            if (gamepad1.y) hinge.setPosition(0.559); //0.559 intake
+            if (gamepad1.y) hinge.setPosition(servoDown); //0.559 intake
             //0.431 rest
 
-            /*if (gamepad1.dpad_up) {
-                servoLeft.setPosition(1);
-                servoRight.setPosition(1);
+            if (gamepad1.dpad_up) {
+                servoLeft.setPosition(servoOut);
+                servoRight.setPosition(servoOut);
             }
             if (gamepad1.dpad_down) {
-                servoLeft.setPosition(0);
-                servoRight.setPosition(0);
-            }*/
-            if (gamepad1.right_bumper) {
-                slideLeft.setPower(0.6);
-                slideRight.setPower(0.6);
+                servoLeft.setPosition(servoIn);
+                servoRight.setPosition(servoIn);
+            }
+
+            /*if (gamepad1.right_bumper) {
+                vertiSlides.manualUp();
             }
             else if (gamepad1.left_bumper) {
-                slideLeft.setPower(-0.6);
-                slideRight.setPower(-0.6);
+                vertiSlides.manualDown();
             }
             else {
-                slideLeft.setPower(0);
-                slideRight.setPower(0);
-            }
+                vertiSlides.powerZero();
+            }*/
 
 
+            if (gamepad1.dpad_right) vertiSlides.setTargetPos(3000);
+            else if (gamepad1.dpad_left) vertiSlides.setTargetPos(0);
+
+            vertiSlides.update();
             telemetry.update();
 
         }
