@@ -184,14 +184,17 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
     public void presetHoriSlides() { //gamepad2 y, b
         if (gamepad2.b) {
+
             horiSlides.in();
             timer1.reset();
             timer1.startTime();
+
         }
         else if (gamepad2.y) {
             horiSlides.out();
             timer2.reset();
             timer2.startTime();
+
         }
     }
 }
