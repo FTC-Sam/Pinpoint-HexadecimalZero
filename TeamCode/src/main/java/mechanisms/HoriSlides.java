@@ -19,12 +19,12 @@ public class HoriSlides {
         in();
     }
 
-    public void manualIn() {
+    public void manualOut() {
         servoLeft.setPosition(servoLeft.getPosition()-0.01);
         servoRight.setPosition(servoRight.getPosition()-0.01);
     }
 
-    public void manualOut() {
+    public void manualIn() {
         servoLeft.setPosition(servoLeft.getPosition()+0.01);
         servoRight.setPosition(servoRight.getPosition()+0.01);
     }

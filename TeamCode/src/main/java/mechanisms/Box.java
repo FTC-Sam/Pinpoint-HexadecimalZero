@@ -16,37 +16,35 @@ public class Box {
 
         spin = (CRServoImplEx) hardwareMap.crservo.get("spin");
         hinge = (ServoImplEx) hardwareMap.servo.get("hinge");
-        hinge.setPosition(0.45);
+        hinge.setPosition(0.75);
     }
 
     public void rest() {
         spin.setPower(-0.1);
-        if (hinge.getPosition() < 0.65) hinge.setPosition(hinge.getPosition()+0.005);
-        else if (hinge.getPosition() > 0.65) hinge.setPosition(hinge.getPosition()-0.005);
-        else hinge.setPosition(0.65);
+    }
+    public void restPosition() {
+        if (hinge.getPosition() < 0.6) hinge.setPosition(hinge.getPosition()+0.005);
+        else if (hinge.getPosition() > 0.6) hinge.setPosition(hinge.getPosition()-0.005);
+        else hinge.setPosition(0.6);
     }
 
     public void intake() {
-        if (hinge.getPosition() > 0.25) hinge.setPosition(hinge.getPosition()-0.005);
-        else hinge.setPosition(0.25);
         spin.setPower(-1);
     }
 
     public void outtake() {
-        if (hinge.getPosition() > 0.25) hinge.setPosition(hinge.getPosition()-0.005);
-        else hinge.setPosition(0.25);
         spin.setPower(1);
+    }
+    public void downPosition() {
+        if (hinge.getPosition() > 0.17) hinge.setPosition(hinge.getPosition()-0.005);
+        else hinge.setPosition(0.17);
     }
 
     public void depositPosition() {
-        if (hinge.getPosition() < 0.99) hinge.setPosition(hinge.getPosition()+0.005);
-        else hinge.setPosition(0.99);
+        if (hinge.getPosition() < 0.965) hinge.setPosition(hinge.getPosition()+0.005);
+        else hinge.setPosition(0.965);
     }
     public void deposit() {
         spin.setPower(1);
-    }
-
-    public boolean isDepositPosition() {
-        return hinge.getPosition() == 0.99;
     }
 }

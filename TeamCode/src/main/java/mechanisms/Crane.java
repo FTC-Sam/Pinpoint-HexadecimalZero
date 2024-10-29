@@ -131,6 +131,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         }
         if ((vertiSlides.getTargetPos() == down) || currentDepositState == DepositState.SPECIMEN) {
             box.rest();
+            box.restPosition();
         }
     }
 
@@ -155,22 +156,29 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     //---------------------------------------------------------------------------------------------
     //ground mode related
     public void manualHoriSlides() { //gamepad2 left_stick_y
-        if (-gamepad2.left_stick_y > 0.2) {
+        if (-gamepad2.left_stick_y > 0.2 && horiSlides.getPosition() > -0.65) {
             horiSlides.manualOut();
         }
-        if (-gamepad2.left_stick_y < -0.2) {
+        if (-gamepad2.left_stick_y < -0.2 && horiSlides.getPosition() < 0.75) {
             horiSlides.manualIn();
         }
     }
     public void boxTake() { //gamepad1 a, x
-        if ((horiSlides.getPosition() <= horiThreshold) && gamepad1.a && timer2.seconds() > 0.3) {
-            box.intake();
-        }
-        else if ((horiSlides.getPosition() <= horiThreshold) && gamepad1.x && timer2.seconds() > 0.3) {
-            box.outtake();
+        if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.5) {
+            box.downPosition();
+            if (gamepad1.right_bumper) {
+                box.intake();
+            }
+            else if (gamepad1.left_bumper) {
+                box.outtake();
+            }
+            else {
+                box.rest();
+            }
         }
         else {
             box.rest();
+            box.restPosition();
         }
     }
 
