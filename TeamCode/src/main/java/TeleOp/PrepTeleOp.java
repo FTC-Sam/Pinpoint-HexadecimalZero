@@ -42,7 +42,6 @@ public class PrepTeleOp extends LinearOpMode {
 
     private void initialize() {
 
-        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1);
         spin = (CRServoImplEx) hardwareMap.crservo.get("spin");
         hinge = (ServoImplEx) hardwareMap.servo.get("hinge");
         servoLeft = (ServoImplEx) hardwareMap.servo.get("servoLeft");
@@ -66,7 +65,6 @@ public class PrepTeleOp extends LinearOpMode {
         while (opModeInInit()) {
         }
         while (opModeIsActive()) {
-            drivetrain.drive();
             if (gamepad1.a) spin.setPower(-1);
             else if (gamepad1.b) spin.setPower(1);
             else spin.setPower(0);

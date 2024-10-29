@@ -20,9 +20,9 @@ public class VertiSlides {
     private Telemetry telemetry;
 
     public static double kpu = 0.005;
-    public static double kpd = 0.00000015;
+    public static double kpd = 0.0000002;
 
-    public static double ki = 0.00000000001;
+    public static double ki = 0.0000000000;
     public static double kd = 0.000000;
 
     public VertiSlides(HardwareMap hardwareMap, Telemetry telemetry) {

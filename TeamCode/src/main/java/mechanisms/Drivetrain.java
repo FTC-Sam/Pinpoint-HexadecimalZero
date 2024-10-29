@@ -10,11 +10,13 @@ public class Drivetrain {
     private DcMotorEx motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight;
     private Gamepad gamepad1;
     private Telemetry telemetry;
+    private Crane crane;
 
-    public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad) {
+    public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad, Crane crane) {
 
         this.gamepad1 = gamepad;
         this.telemetry = telemetry;
+        this.crane = crane;
 
         motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("FL");
         motorBackLeft = (DcMotorEx) hardwareMap.dcMotor.get("BL");
@@ -78,7 +80,13 @@ public class Drivetrain {
             backRightPower /= maxValue;
         }
 
-        if(gamepad1.left_trigger>0.1){
+        if (crane.vertiSlides.getCurrentPos() > 2000) {
+            motorFrontLeft.setPower(frontLeftPower*.4);
+            motorBackLeft.setPower(backLeftPower*.4);
+            motorFrontRight.setPower(frontRightPower*.4);
+            motorBackRight.setPower(backRightPower*.4);
+        }
+        else if(gamepad1.right_trigger>0.1){
             motorFrontLeft.setPower(frontLeftPower*.4);
             motorBackLeft.setPower(backLeftPower*.4);
             motorFrontRight.setPower(frontRightPower*.4);

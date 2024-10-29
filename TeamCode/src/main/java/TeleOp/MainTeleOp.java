@@ -32,8 +32,8 @@ public class MainTeleOp extends LinearOpMode {
 
     private void initialize() {
 
-        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1);
         crane = new Crane(hardwareMap,telemetry, gamepad1, gamepad2);
+        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1, crane);
 
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
