@@ -1,6 +1,10 @@
 package mechanisms;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -131,6 +135,27 @@ public class VertiSlides {
         telemetry.addData("error: ", error);
         telemetry.update();
         return ((error * kpd) + (derivative * kd) + (integralSum * ki));
+    }
+
+
+
+
+
+
+
+    public class VertiSlidesAutoAction implements Action {
+        private final int position;
+        public VertiSlidesAutoAction(int position) {
+            this.position = position;
+        }
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            targetPos = position;
+            return false;
+        }
+    }
+    public Action runVertiSlidesAuto(int position) {
+        return new VertiSlidesAutoAction(position);
     }
 
 }

@@ -1,5 +1,9 @@
 package mechanisms;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -11,6 +15,7 @@ public class HoriSlides {
     private ServoImplEx servoLeft;
     private ServoImplEx servoRight;
     private Telemetry telemetry;
+
     public HoriSlides(HardwareMap hardwareMap, Telemetry telemetry) {
         servoLeft = (ServoImplEx) hardwareMap.servo.get("servoLeft");
         servoRight = (ServoImplEx) hardwareMap.servo.get("servoRight");
@@ -49,5 +54,25 @@ public class HoriSlides {
     public void setPosition(double a) {
         servoLeft.setPosition(a);
         servoRight.setPosition(a);
+    }
+
+
+
+
+
+    public class HoriSlidesAutoAction implements Action {
+        private final double position;
+        public HoriSlidesAutoAction(double position) {
+            this.position = position;
+        }
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            servoLeft.setPosition(position);
+            servoRight.setPosition(position);
+            return false;
+        }
+    }
+    public Action runHoriSlidesAuto(double position) {
+        return new HoriSlidesAutoAction(position);
     }
 }

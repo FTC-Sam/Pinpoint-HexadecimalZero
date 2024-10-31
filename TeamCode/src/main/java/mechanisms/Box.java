@@ -18,11 +18,14 @@ public class Box {
         ARMDOWN,
         ARMUP,
         INTAKE,
-        REST
+        REST,
+        DEPOSIT,
+        OUTTAKE
     }
 
     private final double downPosition = 0.17;
     private final double restPosition = 0.6;
+    private final double depositPosition = 0.965;
 
     public Box(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -54,8 +57,8 @@ public class Box {
     }
 
     public void depositPosition() {
-        if (hinge.getPosition() < 0.965) hinge.setPosition(hinge.getPosition()+0.005);
-        else hinge.setPosition(0.965);
+        if (hinge.getPosition() < depositPosition) hinge.setPosition(hinge.getPosition()+0.005);
+        else hinge.setPosition(depositPosition);
     }
     public void deposit() {
         spin.setPower(1);
@@ -71,7 +74,7 @@ public class Box {
 
 
     public class BoxAutoAction implements Action {
-        private AutoActionModes action;
+        private final AutoActionModes action;
         public BoxAutoAction(AutoActionModes action) {
             this.action = action;
         }
@@ -90,11 +93,17 @@ public class Box {
                 case REST:
                     rest();
                     break;
+                case DEPOSIT:
+                    hinge.setPosition(depositPosition);
+                    break;
+                case OUTTAKE:
+                    outtake();
+                    break;
             }
-            return true;
+            return false;
         }
     }
-    public Action runBox(AutoActionModes action) {
+    public Action runBoxAuto(AutoActionModes action) {
         return new BoxAutoAction(action);
     }
 }
