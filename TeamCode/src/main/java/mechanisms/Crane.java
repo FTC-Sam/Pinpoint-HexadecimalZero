@@ -17,7 +17,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     private Gamepad gamepad2;
     private int down = 50;
     private int lowBucket = 2000;
-    private int highBucket = 4000;
+    private int highBucket = 4700;
     private int lowBar = 500;
     private int highBar = 1500;
     private int climbHeight = 2000;
@@ -37,7 +37,9 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     CraneStates currentState = CraneStates.GROUND;
     public DepositState currentDepositState = DepositState.SAMPLE;
     private double horiThreshold = 0;
-    private int vertiThreshold = 2000;
+
+    private boolean isArmDown = false;
+    private boolean isArmButtonDown = false;
 
 
     public Crane(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
@@ -163,20 +165,39 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             horiSlides.manualIn();
         }
     }
-    public void boxTake() { //gamepad1 a, x
+    public void boxTake() { //gamepad1 a, right bumper, left bumper
         if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.5) {
-            box.downPosition();
-            if (gamepad1.right_bumper) {
-                box.intake();
+            if (gamepad1.a && !isArmButtonDown && !isArmDown) {
+                isArmDown = true;
+                isArmButtonDown = true;
             }
-            else if (gamepad1.left_bumper) {
-                box.outtake();
+            else if (gamepad1.a && !isArmButtonDown && isArmDown) {
+                isArmDown = false;
+                isArmButtonDown = true;
+            }
+            else if (!gamepad1.a) {
+                isArmButtonDown = false;
+            }
+
+
+            if (isArmDown) {
+                box.downPosition();
+                if (gamepad1.right_bumper) {
+                    box.intake();
+                } else if (gamepad1.left_bumper) {
+                    box.outtake();
+                } else {
+                    box.rest();
+                }
             }
             else {
                 box.rest();
+                box.restPosition();
             }
         }
         else {
+            isArmDown = false;
+            isArmButtonDown = false;
             box.rest();
             box.restPosition();
         }
