@@ -13,14 +13,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Box {
     private Telemetry telemetry;
     private CRServoImplEx spin;
-    private ServoImplEx hinge;
+    public ServoImplEx hinge;
     public enum AutoActionModes {
         ARMDOWN,
         ARMUP,
         INTAKE,
         REST,
         DEPOSIT,
-        OUTTAKE
+        OUTTAKE,
+        INTAKEHALF
     }
 
     private final double downPosition = 0.17;
@@ -35,6 +36,14 @@ public class Box {
         hinge.setPosition(0.75);
     }
 
+    public Box(HardwareMap hardwareMap, Telemetry telemetry, boolean t) {
+        this.telemetry = telemetry;
+
+        spin = (CRServoImplEx) hardwareMap.crservo.get("spin");
+        hinge = (ServoImplEx) hardwareMap.servo.get("hinge");
+        hinge.setPosition(depositPosition);
+    }
+
     public void rest() {
         spin.setPower(0);
     }
@@ -45,11 +54,11 @@ public class Box {
     }
 
     public void intake() {
-        spin.setPower(-1);
+        spin.setPower(-0.6);
     }
 
     public void outtake() {
-        spin.setPower(1);
+        spin.setPower(0.7);
     }
     public void downPosition() {
         if (hinge.getPosition() > downPosition) hinge.setPosition(hinge.getPosition()-0.005);
@@ -82,7 +91,7 @@ public class Box {
         public boolean run(@NonNull TelemetryPacket packet) {
             switch (action) {
                 case ARMDOWN:
-                    hinge.setPosition(downPosition);
+                    hinge.setPosition(0.2);
                     break;
                 case ARMUP:
                     hinge.setPosition(restPosition);
@@ -98,6 +107,9 @@ public class Box {
                     break;
                 case OUTTAKE:
                     outtake();
+                    break;
+                case INTAKEHALF:
+                    spin.setPower(-0.5);
                     break;
             }
             return false;

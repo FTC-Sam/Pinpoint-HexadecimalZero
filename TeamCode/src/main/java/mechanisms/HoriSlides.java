@@ -23,6 +23,12 @@ public class HoriSlides {
         this.telemetry = telemetry;
         in();
     }
+    public HoriSlides(HardwareMap hardwareMap, Telemetry telemetry, boolean t) {
+        servoLeft = (ServoImplEx) hardwareMap.servo.get("servoLeft");
+        servoRight = (ServoImplEx) hardwareMap.servo.get("servoRight");
+        servoRight.setDirection(Servo.Direction.REVERSE);
+        this.telemetry = telemetry;
+    }
 
     public void manualOut() {
         servoLeft.setPosition(servoLeft.getPosition()-0.01);
