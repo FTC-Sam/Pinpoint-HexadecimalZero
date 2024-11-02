@@ -68,7 +68,6 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
 
         }
-        reset();
         manualVertiSlides(); //works any time
         presetVertiSlides(); //works only if horizontal slides retracted, meaning also not intake and outtake by logic check
         if (!isVertiManual) vertiSlides.update();
@@ -204,12 +203,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         }
     }
 
-    public void reset() {
-        if (gamepad2.x) {
-            vertiSlides.reset();
-            vertiSlides.setTargetPos(0);
-        }
-    }
+
 
 
     public void presetHoriSlides() { //gamepad2 y, b

@@ -87,10 +87,10 @@ public class Drivetrain {
             motorBackRight.setPower(backRightPower*.4);
         }
         else if (!crane.horiSlides.in) {
-            motorFrontLeft.setPower(frontLeftPower*.1);
-            motorBackLeft.setPower(backLeftPower*.1);
-            motorFrontRight.setPower(frontRightPower*.1);
-            motorBackRight.setPower(backRightPower*.1);
+            motorFrontLeft.setPower(frontLeftPower*.4);
+            motorBackLeft.setPower(backLeftPower*.4);
+            motorFrontRight.setPower(frontRightPower*.4);
+            motorBackRight.setPower(backRightPower*.4);
         }
         else if(gamepad1.right_trigger>0.1){
             motorFrontLeft.setPower(frontLeftPower*.4);
