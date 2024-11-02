@@ -62,7 +62,7 @@ public class Box {
     }
 
     public void outtake() {
-        spin.setPower(0.6);
+        spin.setPower(0.25);
     }
     public void downPosition() {
         if (hinge.getPosition() > downPosition) hinge.setPosition(hinge.getPosition()-0.05);
@@ -95,13 +95,13 @@ public class Box {
         public boolean run(@NonNull TelemetryPacket packet) {
             switch (action) {
                 case ARMDOWN:
-                    hinge.setPosition(0.2);
+                    hinge.setPosition(0.17);
                     break;
                 case ARMUP:
                     hinge.setPosition(restPosition);
                     break;
                 case INTAKE:
-                    intake();
+                    spin.setPower(-0.8);
                     break;
                 case REST:
                     rest();

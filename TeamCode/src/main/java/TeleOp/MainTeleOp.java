@@ -50,6 +50,7 @@ public class MainTeleOp extends LinearOpMode {
         initialize();
         while (opModeInInit()) {
         }
+        crane.horiSlides.in();
         while (opModeIsActive()) {
             crane.executeTeleOp();
             drivetrain.drive();

@@ -42,9 +42,9 @@ public class Drivetrain {
 
     public void drive() {
 
-        double y =  -gamepad1.left_stick_y; // Remember, this is reversed!
-        double x = gamepad1.left_stick_x;
-        double rx = gamepad1.right_stick_x;
+        double y =  -gamepad1.left_stick_y * (crane.vertiSlides.getCurrentPos() > 2000?.25:1); // Remember, this is reversed!
+        double x = gamepad1.left_stick_x * (crane.vertiSlides.getCurrentPos() > 2000?.25:1);
+        double rx = gamepad1.right_stick_x * (!crane.horiSlides.in?.3:1) * (crane.vertiSlides.getCurrentPos() > 2000?.4:1);
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 
         // Calculate the mecanum motor powers
@@ -80,19 +80,8 @@ public class Drivetrain {
             backRightPower /= maxValue;
         }
 
-        if (crane.vertiSlides.getCurrentPos() > 2000) {
-            motorFrontLeft.setPower(frontLeftPower*.4);
-            motorBackLeft.setPower(backLeftPower*.4);
-            motorFrontRight.setPower(frontRightPower*.4);
-            motorBackRight.setPower(backRightPower*.4);
-        }
-        else if (!crane.horiSlides.in) {
-            motorFrontLeft.setPower(frontLeftPower*.4);
-            motorBackLeft.setPower(backLeftPower*.4);
-            motorFrontRight.setPower(frontRightPower*.4);
-            motorBackRight.setPower(backRightPower*.4);
-        }
-        else if(gamepad1.right_trigger>0.1){
+
+        if(gamepad1.right_trigger>0.1){
             motorFrontLeft.setPower(frontLeftPower*.4);
             motorBackLeft.setPower(backLeftPower*.4);
             motorFrontRight.setPower(frontRightPower*.4);

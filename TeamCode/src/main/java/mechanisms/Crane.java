@@ -45,8 +45,8 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     public Crane(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
 
         this.telemetry = telemetry;
-        box = new Box(hardwareMap, this.telemetry);
-        horiSlides = new HoriSlides(hardwareMap, this.telemetry);
+        box = new Box(hardwareMap, this.telemetry, true);
+        horiSlides = new HoriSlides(hardwareMap, this.telemetry, true);
         vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
