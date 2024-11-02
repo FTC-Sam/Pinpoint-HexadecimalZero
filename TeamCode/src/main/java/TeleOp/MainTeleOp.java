@@ -26,7 +26,6 @@ public class MainTeleOp extends LinearOpMode {
     //DO NOT MODIFY THIS CLASS WHATSOEVER UNLESS AUTHORIZED-> MAKE A COPY
     private Drivetrain drivetrain;
     private Crane crane;
-    private HoriSlides horiSlides;
 
 
 
@@ -35,8 +34,7 @@ public class MainTeleOp extends LinearOpMode {
     private void initialize() {
 
         crane = new Crane(hardwareMap,telemetry, gamepad1, gamepad2);
-        horiSlides = new HoriSlides(hardwareMap, telemetry);
-        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1, crane, horiSlides);
+        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1, crane);
 
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
