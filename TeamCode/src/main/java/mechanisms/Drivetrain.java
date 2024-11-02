@@ -44,7 +44,7 @@ public class Drivetrain {
 
         double y =  -gamepad1.left_stick_y * (crane.vertiSlides.getCurrentPos() > 2000?.8:1); // Remember, this is reversed!
         double x = gamepad1.left_stick_x * (crane.vertiSlides.getCurrentPos() > 2000?.8:1);
-        double rx = gamepad1.right_stick_x * (!crane.horiSlides.in?.3:1) * (crane.vertiSlides.getCurrentPos() > 2000?.9:1);
+        double rx = gamepad1.right_stick_x * (!crane.horiSlides.in?.7:1) * (crane.vertiSlides.getCurrentPos() > 2000?.9:1);
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 
         // Calculate the mecanum motor powers

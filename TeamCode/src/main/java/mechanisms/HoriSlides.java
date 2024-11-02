@@ -47,13 +47,13 @@ public class HoriSlides {
         in = false;
     }
     public void in() {
-        servoLeft.setPosition(0.8);
-        servoRight.setPosition(0.8);
+        servoLeft.setPosition(1);
+        servoRight.setPosition(1);
         in = true;
     }
 
     public boolean isReset() {
-        return servoLeft.getPosition() == 0.8;
+        return servoLeft.getPosition() == 1;
     }
 
     public double getPosition() {

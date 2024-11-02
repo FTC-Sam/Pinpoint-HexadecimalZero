@@ -24,7 +24,7 @@ public class Box {
         INTAKEHALF
     }
 
-    private final double downPosition = 0.2;
+    private final double downPosition = 0.19;
     private final double restPosition = 0.6;
     private final double depositPosition = 0.95;
 
