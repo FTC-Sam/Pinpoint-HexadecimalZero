@@ -68,6 +68,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
 
         }
+        reset();
         manualVertiSlides(); //works any time
         presetVertiSlides(); //works only if horizontal slides retracted, meaning also not intake and outtake by logic check
         if (!isVertiManual) vertiSlides.update();
@@ -96,11 +97,11 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                 currentState = CraneStates.EXTENSION;
                 currentDepositState = DepositState.SPECIMEN;
             }
-            if (gamepad2.x) {
+            /*if (gamepad2.x) {
                 vertiSlides.setTargetPos(lowBar);
                 currentState = CraneStates.EXTENSION;
                 currentDepositState = DepositState.SPECIMEN;
-            }
+            }*/
             if (gamepad2.dpad_down) {
                 vertiSlides.setTargetPos(down);
                 currentState = CraneStates.GROUND;
@@ -202,6 +203,14 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             box.restPosition();
         }
     }
+
+    public void reset() {
+        if (gamepad2.x) {
+            vertiSlides.reset();
+            vertiSlides.setTargetPos(0);
+        }
+    }
+
 
     public void presetHoriSlides() { //gamepad2 y, b
         if (gamepad2.b) {

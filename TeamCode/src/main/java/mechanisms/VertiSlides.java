@@ -93,6 +93,18 @@ public class VertiSlides {
         }
     }
 
+    public void reset() {
+        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slideLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slide3.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slide4.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     public void manualUp() {
         slideLeft.setPower(1);
         slideRight.setPower(1);

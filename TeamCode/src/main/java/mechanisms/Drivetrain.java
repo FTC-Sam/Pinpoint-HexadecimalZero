@@ -88,7 +88,7 @@ public class Drivetrain {
             motorFrontRight.setPower(frontRightPower*.4);
             motorBackRight.setPower(backRightPower*.4);
         }
-        else if (horiSlides.getPosition() < -0.4) {
+        else if (!horiSlides.in) {
             motorFrontLeft.setPower(frontLeftPower*.1);
             motorBackLeft.setPower(backLeftPower*.1);
             motorFrontRight.setPower(frontRightPower*.1);
