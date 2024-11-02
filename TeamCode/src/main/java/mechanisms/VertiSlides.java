@@ -26,7 +26,7 @@ public class VertiSlides {
     private Telemetry telemetry;
 
     public static double kpu = 0.005;
-    public static double kpd = 0.001;
+    public static double kpd = 0.005;
 
     public static double ki = 0.0000000000;
     public static double kd = 0.000000;
@@ -158,6 +158,12 @@ public class VertiSlides {
         telemetry.addData("error: ", error);
         telemetry.update();
         return ((error * kpd) + (derivative * kd) + (integralSum * ki));
+    }
+
+    private void reset_encoder(){
+        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        targetPos = 0;slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 
