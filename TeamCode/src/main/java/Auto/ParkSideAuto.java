@@ -5,11 +5,16 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.PinpointDrive;
+
+import mechanisms.Box;
+import mechanisms.HoriSlides;
+import mechanisms.VertiSlides;
 
 
 @Config
@@ -19,16 +24,37 @@ public class ParkSideAuto extends LinearOpMode {
     private PinpointDrive drive;
     private Pose2d initialPose;
     private Action trajectory;
+    private Box box;
+    private HoriSlides horiSlides;
+    private VertiSlides vertiSlides;
 
 
     private void initialize() {
         initialPose = new Pose2d(35.3, -61, Math.toRadians(180));
         drive = new PinpointDrive(hardwareMap, initialPose);
+        box = new Box(hardwareMap, this.telemetry,true);
+        horiSlides = new HoriSlides(hardwareMap, this.telemetry, true);
+        vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
     }
 
     private void buildTrajectories() {
         TrajectoryActionBuilder trajectoryHolder = drive.actionBuilder(initialPose)
-                .lineToX(50);
+                .afterTime(0, horiSlides.runHoriSlidesAuto(0.8))
+                .afterTime(0, box.runBoxAuto(Box.AutoActionModes.ARMUP))
+                .strafeToLinearHeading(new Vector2d(35.3, -56), Math.toRadians(180))
+                .strafeToLinearHeading(new Vector2d(-55.7, -53.4), Math.toRadians(225))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(4700))
+                .waitSeconds(4)
+                .afterTime(0, box.runBoxAuto(Box.AutoActionModes.DEPOSIT))
+                .afterTime(1, box.runBoxAuto(Box.AutoActionModes.OUTTAKE))
+
+                .waitSeconds(2)
+                .afterTime(0, box.runBoxAuto(Box.AutoActionModes.ARMUP))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(0))
+                .afterTime(1, box.runBoxAuto(Box.AutoActionModes.DEPOSIT))
+
+                .strafeToLinearHeading(new Vector2d(45, -57), Math.toRadians(180))
+                .afterTime(0, box.runBoxAuto(Box.AutoActionModes.REST));
 
 
         trajectory = trajectoryHolder.build();
@@ -51,7 +77,7 @@ public class ParkSideAuto extends LinearOpMode {
 
         Actions.runBlocking(
             new ParallelAction(
-                 trajectory
+                 trajectory, vertiSlides.updateVertiSlidesAuto()
             )
         );
     }

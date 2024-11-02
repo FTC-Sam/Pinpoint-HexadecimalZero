@@ -11,12 +11,14 @@ public class Drivetrain {
     private Gamepad gamepad1;
     private Telemetry telemetry;
     private Crane crane;
+    private HoriSlides horiSlides;
 
-    public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad, Crane crane) {
+    public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad, Crane crane, HoriSlides horiSlides) {
 
         this.gamepad1 = gamepad;
         this.telemetry = telemetry;
         this.crane = crane;
+        this.horiSlides = horiSlides;
 
         motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("FL");
         motorBackLeft = (DcMotorEx) hardwareMap.dcMotor.get("BL");
@@ -85,6 +87,12 @@ public class Drivetrain {
             motorBackLeft.setPower(backLeftPower*.4);
             motorFrontRight.setPower(frontRightPower*.4);
             motorBackRight.setPower(backRightPower*.4);
+        }
+        else if (horiSlides.getPosition() < -0.4) {
+            motorFrontLeft.setPower(frontLeftPower*.1);
+            motorBackLeft.setPower(backLeftPower*.1);
+            motorFrontRight.setPower(frontRightPower*.1);
+            motorBackRight.setPower(backRightPower*.1);
         }
         else if(gamepad1.right_trigger>0.1){
             motorFrontLeft.setPower(frontLeftPower*.4);

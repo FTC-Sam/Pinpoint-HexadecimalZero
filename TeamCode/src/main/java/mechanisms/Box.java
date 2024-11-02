@@ -24,9 +24,9 @@ public class Box {
         INTAKEHALF
     }
 
-    private final double downPosition = 0.17;
+    private final double downPosition = 0.2;
     private final double restPosition = 0.6;
-    private final double depositPosition = 0.965;
+    private final double depositPosition = 0.95;
 
     public Box(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -48,25 +48,29 @@ public class Box {
         spin.setPower(0);
     }
     public void restPosition() {
-        if (hinge.getPosition() < restPosition) hinge.setPosition(hinge.getPosition()+0.005);
-        else if (hinge.getPosition() > restPosition) hinge.setPosition(hinge.getPosition()-0.005);
-        else hinge.setPosition(restPosition);
+        hinge.setPosition(restPosition);
+    }
+
+    public void holdPosition() {
+        if (hinge.getPosition() < 0.3) hinge.setPosition(hinge.getPosition()+0.05);
+        else if (hinge.getPosition() > 0.3) hinge.setPosition(hinge.getPosition()-0.05);
+        else hinge.setPosition(0.3);
     }
 
     public void intake() {
-        spin.setPower(-0.6);
+        spin.setPower(-1);
     }
 
     public void outtake() {
-        spin.setPower(0.7);
+        spin.setPower(0.6);
     }
     public void downPosition() {
-        if (hinge.getPosition() > downPosition) hinge.setPosition(hinge.getPosition()-0.005);
+        if (hinge.getPosition() > downPosition) hinge.setPosition(hinge.getPosition()-0.05);
         else hinge.setPosition(downPosition);
     }
 
     public void depositPosition() {
-        if (hinge.getPosition() < depositPosition) hinge.setPosition(hinge.getPosition()+0.005);
+        if (hinge.getPosition() < depositPosition) hinge.setPosition(hinge.getPosition()+0.05);
         else hinge.setPosition(depositPosition);
     }
     public void deposit() {

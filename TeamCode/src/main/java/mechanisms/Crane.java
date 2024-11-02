@@ -166,7 +166,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         }
     }
     public void boxTake() { //gamepad1 a, right bumper, left bumper
-        if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.5) {
+        if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.3) {
             if (gamepad1.a && !isArmButtonDown && !isArmDown) {
                 isArmDown = true;
                 isArmButtonDown = true;
@@ -192,7 +192,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             }
             else {
                 box.rest();
-                box.restPosition();
+                box.holdPosition();
             }
         }
         else {
