@@ -42,8 +42,8 @@ public class HoriSlides {
     }
 
     public void out() {
-        servoLeft.setPosition(-0.7);
-        servoRight.setPosition(-0.7);
+        servoLeft.setPosition(0.3);
+        servoRight.setPosition(0.3);
         in = false;
     }
     public void in() {

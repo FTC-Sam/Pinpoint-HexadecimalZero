@@ -36,7 +36,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
     CraneStates currentState = CraneStates.GROUND;
     public DepositState currentDepositState = DepositState.SAMPLE;
-    private double horiThreshold = 0;
+    private double horiThreshold = 0.6;
 
     private boolean isArmDown = false;
     private boolean isArmButtonDown = false;
@@ -57,7 +57,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         switch (currentState) {
             case GROUND:
                 boxTake(); //intake outtake, ensures retraction of box if slides retract
-                manualHoriSlides(); //slide manual
+                //manualHoriSlides(); //slide manual
                 presetHoriSlides(); //slide auto
                 break;
 

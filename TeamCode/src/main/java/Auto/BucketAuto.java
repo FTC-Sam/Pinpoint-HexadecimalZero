@@ -54,10 +54,10 @@ public class BucketAuto extends LinearOpMode {
 
                 .strafeToLinearHeading(new Vector2d(-44, -53), Math.toRadians(275))
                 .afterTime(0, box.runBoxAuto(Box.AutoActionModes.INTAKE))
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(-0.7))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.3))
                 .afterTime(0.8, box.runBoxAuto(Box.AutoActionModes.ARMDOWN))
                 .waitSeconds(1.5)
-                .strafeToLinearHeading(new Vector2d(-47, -48), Math.toRadians(280))
+                .strafeToLinearHeading(new Vector2d(-47, -46), Math.toRadians(280))
                 .waitSeconds(1)
 
                 .afterTime(0, box.runBoxAuto(Box.AutoActionModes.ARMUP))
@@ -74,7 +74,7 @@ public class BucketAuto extends LinearOpMode {
 
                 .strafeToLinearHeading(new Vector2d(-50, -54), Math.toRadians(290))
                 .afterTime(0, box.runBoxAuto(Box.AutoActionModes.INTAKE))
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(-0.7))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.3))
                 .afterTime(0.8, box.runBoxAuto(Box.AutoActionModes.ARMDOWN))
                 .waitSeconds(1.5)
                 .strafeToLinearHeading(new Vector2d(-55, -44), Math.toRadians(280))
