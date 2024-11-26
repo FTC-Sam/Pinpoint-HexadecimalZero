@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class Crane { //I got rid of hardwareMap variable and wanna try it as a disposable
                      //constructor variable since it's only needed during initialization
     private Telemetry telemetry;
-    public Box box;
+    public Intake intake;
     public HoriSlides horiSlides;
     public VertiSlides vertiSlides;
     private Gamepad gamepad1;
@@ -40,12 +40,14 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
     private boolean isArmDown = false;
     private boolean isArmButtonDown = false;
+    private boolean isWristButtonDown = false;
+    private boolean wristMode = true;
 
 
     public Crane(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
 
         this.telemetry = telemetry;
-        box = new Box(hardwareMap, this.telemetry, true);
+        intake = new Intake(hardwareMap, this.telemetry);
         horiSlides = new HoriSlides(hardwareMap, this.telemetry, true);
         vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
         this.gamepad1 = gamepad1;
@@ -56,8 +58,8 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     public void executeTeleOp() {
         switch (currentState) {
             case GROUND:
-                boxTake(); //intake outtake, ensures retraction of box if slides retract
-                //manualHoriSlides(); //slide manual
+                setWristMode();
+                intake(); //intake outtake, ensures retraction of box if slides retract
                 presetHoriSlides(); //slide auto
                 break;
 
@@ -66,17 +68,31 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                 deposit();
                 break;
 
+            case CLIMB:
+                if (gamepad2.right_bumper) {
 
+                }
+
+                return;
         }
         manualVertiSlides(); //works any time
         presetVertiSlides(); //works only if horizontal slides retracted, meaning also not intake and outtake by logic check
+        checkClimb();
         if (!isVertiManual) vertiSlides.update();
+
     }
 
 
 
 
 
+
+
+    public void checkClimb() {
+        if(gamepad2.share && gamepad2.start){
+            currentState = CraneStates.CLIMB;
+        }
+    }
     //all mode related
 
     public void presetVertiSlides() { //gamepad2 up, left, right, down, x
@@ -96,11 +112,11 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                 currentState = CraneStates.EXTENSION;
                 currentDepositState = DepositState.SPECIMEN;
             }
-            /*if (gamepad2.x) {
+            if (gamepad2.x) {
                 vertiSlides.setTargetPos(lowBar);
                 currentState = CraneStates.EXTENSION;
                 currentDepositState = DepositState.SPECIMEN;
-            }*/
+            }
             if (gamepad2.dpad_down) {
                 vertiSlides.setTargetPos(down);
                 currentState = CraneStates.GROUND;
@@ -129,22 +145,22 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
     public void setArm() {
         if (currentDepositState == DepositState.SAMPLE) { //can add and here to threshold arm flipping
-            box.depositPosition();
+            intake.samplePosition();
         }
-        if ((vertiSlides.getTargetPos() == down) || currentDepositState == DepositState.SPECIMEN) {
-            box.rest();
-            box.restPosition();
+        if (currentDepositState == DepositState.SPECIMEN) {
+            intake.specimenPosition();
+        }
+        if (vertiSlides.getTargetPos() == down) {
+            intake.closeClaw();
+            intake.restPosition();
         }
     }
 
     public void deposit() { //gamepad2 a
-        if (gamepad2.a) {
-            if (currentDepositState == DepositState.SAMPLE) {
-                box.deposit();
-            }
-            else {
-                //claw code need edge detector
-            }
+        if (gamepad1.right_bumper) {
+            intake.closeClaw();
+        } else if (gamepad1.left_bumper) {
+            intake.openClaw();
         }
     }
 
@@ -165,7 +181,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             horiSlides.manualIn();
         }
     }
-    public void boxTake() { //gamepad1 a, right bumper, left bumper
+    public void intake() { //gamepad1 a, right bumper, left bumper
         if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.3) {
             if (gamepad1.a && !isArmButtonDown && !isArmDown) {
                 isArmDown = true;
@@ -181,25 +197,36 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
 
             if (isArmDown) {
-                box.downPosition();
+                intake.intakePosition(wristMode);
                 if (gamepad1.right_bumper) {
-                    box.intake();
+                    intake.closeClaw();
                 } else if (gamepad1.left_bumper) {
-                    box.outtake();
-                } else {
-                    box.rest();
+                    intake.openClaw();
                 }
             }
             else {
-                box.rest();
-                box.holdPosition();
+                intake.restPosition();
             }
         }
         else {
             isArmDown = false;
             isArmButtonDown = false;
-            box.rest();
-            box.restPosition();
+            intake.closeClaw();
+            intake.restPosition();
+        }
+    }
+
+    public void setWristMode() {
+        if (gamepad1.b && !isWristButtonDown && !wristMode) {
+            wristMode = true;
+            isWristButtonDown = true;
+        }
+        else if (gamepad1.b && !isWristButtonDown && wristMode) {
+            wristMode = false;
+            isWristButtonDown = true;
+        }
+        else if (!gamepad1.b) {
+            isWristButtonDown = false;
         }
     }
 
