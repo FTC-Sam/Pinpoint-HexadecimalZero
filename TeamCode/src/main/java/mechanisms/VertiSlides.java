@@ -15,9 +15,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class VertiSlides {
-    private DcMotorEx slideLeft;
-    private DcMotorEx slideRight;
-    private DcMotorEx slide3;
+    private DcMotorEx slideTop;
+    private DcMotorEx slideMid;
+    private DcMotorEx slideBot;
+    private DcMotorEx climb;
+
     private int targetPos;
     private ElapsedTime timer = new ElapsedTime();
     private double integralSum = 0;
@@ -25,33 +27,37 @@ public class VertiSlides {
     private Telemetry telemetry;
 
     public static double kpu = 0.005;
-    public static double kpd = 0.005;
+    public static double kpd = 0.0000001;
 
     public static double ki = 0.0000000000;
     public static double kd = 0.000000;
 
     public VertiSlides(HardwareMap hardwareMap, Telemetry telemetry) {
-        slideLeft = (DcMotorEx) hardwareMap.dcMotor.get("slideLeft");
-        slideRight = (DcMotorEx) hardwareMap.dcMotor.get("slideRight");
-        slide3 = (DcMotorEx) hardwareMap.dcMotor.get("slide3");
-
-        slideLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        slideRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        slide3.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        slideLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        slideRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        slide3.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideTop = (DcMotorEx) hardwareMap.dcMotor.get("slideTop");
+        slideMid = (DcMotorEx) hardwareMap.dcMotor.get("slideMid");
+        slideBot = (DcMotorEx) hardwareMap.dcMotor.get("slideBot");
+        climb = (DcMotorEx) hardwareMap.dcMotor.get("climb");
 
 
+        slideTop.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        slideMid.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        slideBot.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        climb.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        slideRight.setDirection(DcMotorSimple.Direction.REVERSE); // leave this be
+        slideTop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMid.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideBot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        climb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        slide3.setDirection(DcMotorSimple.Direction.REVERSE);
+        slideTop.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideMid.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideBot.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        climb.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+
+
+
+        slideMid.setDirection(DcMotorSimple.Direction.REVERSE); // leave this be
 
 
         this.telemetry = telemetry;
@@ -61,59 +67,74 @@ public class VertiSlides {
     public void update() {
         int tolerance = 0;
 
-        if ((getCurrentPos() - targetPos) < -200) {
-            slideLeft.setPower(1);
-            slideRight.setPower(1);
-            slide3.setPower(1);
-        }
-        else if ((getCurrentPos() - targetPos) < -tolerance) {
-            slideLeft.setPower(returnPowerUp());
-            slideRight.setPower(returnPowerUp());
-            slide3.setPower(returnPowerUp());
+        /*if ((getCurrentPos() - targetPos) < -200) {
+            slideTop.setPower(1);
+            slideMid.setPower(1);
+            slideBot.setPower(1);
+        }*/
+        if ((getCurrentPos() - targetPos) < -tolerance) {
+            slideTop.setPower(returnPowerUp());
+            slideMid.setPower(returnPowerUp());
+            slideBot.setPower(returnPowerUp());
         }
         else if ((getCurrentPos() - targetPos) > tolerance) {
-            slideLeft.setPower(returnPowerDown());
-            slideRight.setPower(returnPowerDown());
-            slide3.setPower(returnPowerDown());
+            slideTop.setPower(returnPowerDown());
+            slideMid.setPower(returnPowerDown());
+            slideBot.setPower(returnPowerDown());
         }
         else {
-            slideLeft.setPower(0);
-            slideRight.setPower(0);
-            slide3.setPower(0);
+            slideTop.setPower(0);
+            slideMid.setPower(0);
+            slideBot.setPower(0);
 
         }
     }
 
     public void reset() {
-        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideTop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMid.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideBot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        slideLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        slideRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        slide3.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideTop.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideMid.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideBot.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void manualUp() {
-        slideLeft.setPower(1);
-        slideRight.setPower(1);
-        slide3.setPower(1);
+        slideTop.setPower(1);
+        slideMid.setPower(1);
+        slideBot.setPower(1);
 
     } //when running manual, the update method needs to be halted
 
     public void manualDown() {
-        slideLeft.setPower(-1);
-        slideRight.setPower(-1);
-        slide3.setPower(-1);
+        slideTop.setPower(-0.3);
+        slideMid.setPower(-0.3);
+        slideBot.setPower(-0.3);
 
     }
+    public void powerZero() {
+        slideTop.setPower(0);
+        slideMid.setPower(0);
+        slideBot.setPower(0);
+
+    }
+
+    public void manualClimbUp() {
+        climb.setPower(1);
+    }
+    public void manualClimbDown() {
+        climb.setPower(-1);
+    }
+
+
 
     public void setTargetPos(int targetPos) {
         this.targetPos = targetPos;
     }
 
     public int getCurrentPos() {
-        return (Math.abs(slideRight.getCurrentPosition()));
+        return (Math.abs(slideTop.getCurrentPosition()));
     }
     public int getTargetPos() {
         return targetPos;
@@ -148,9 +169,10 @@ public class VertiSlides {
     }
 
     private void reset_encoder(){
-        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        targetPos = 0;slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMid.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMid.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        targetPos = 0;
+        slideMid.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 

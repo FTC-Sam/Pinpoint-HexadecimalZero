@@ -34,7 +34,7 @@ public class MainTeleOp extends LinearOpMode {
     private void initialize() {
 
         crane = new Crane(hardwareMap,telemetry, gamepad1, gamepad2);
-        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1, crane);
+        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1);
 
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -51,6 +51,7 @@ public class MainTeleOp extends LinearOpMode {
         while (opModeInInit()) {
         }
         crane.horiSlides.in();
+        crane.intake.restPosition();
         while (opModeIsActive()) {
             crane.executeTeleOp();
             drivetrain.drive();

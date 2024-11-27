@@ -2,6 +2,7 @@ package mechanisms;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,13 +10,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
+@Config
 public class HoriSlides {
 
     private ServoImplEx servoLeft;
     private ServoImplEx servoRight;
     private Telemetry telemetry;
-    public boolean in = true;
+
+    public static double out = 0.7;
+    public static double in = 0.35;
+
+    //public boolean in = true;
 
     public HoriSlides(HardwareMap hardwareMap, Telemetry telemetry) {
         servoLeft = (ServoImplEx) hardwareMap.servo.get("servoLeft");
@@ -30,29 +35,20 @@ public class HoriSlides {
         this.telemetry = telemetry;
     }
 
-    public void manualOut() {
-        servoLeft.setPosition(servoLeft.getPosition()-0.01);
-        servoRight.setPosition(servoRight.getPosition()-0.01);
-    }
-
-    public void manualIn() {
-        servoLeft.setPosition(servoLeft.getPosition()+0.01);
-        servoRight.setPosition(servoRight.getPosition()+0.01);
-    }
 
     public void out() {
-        servoLeft.setPosition(0.3);
-        servoRight.setPosition(0.3);
-        in = false;
+        servoLeft.setPosition(out);
+        servoRight.setPosition(out);
+        //in = false;
     }
     public void in() {
-        servoLeft.setPosition(1);
-        servoRight.setPosition(1);
-        in = true;
+        servoLeft.setPosition(in);
+        servoRight.setPosition(in);
+        //in = true;
     }
 
     public boolean isReset() {
-        return servoLeft.getPosition() == 1;
+        return servoLeft.getPosition() < 0.4;
     }
 
     public double getPosition() {

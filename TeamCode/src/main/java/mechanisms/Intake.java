@@ -2,6 +2,7 @@ package mechanisms;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
@@ -10,7 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-
+@Config
 public class Intake {
     private Telemetry telemetry;
     public ServoImplEx bigHingeLeft;
@@ -33,6 +34,7 @@ public class Intake {
     private final double downPosition = 0.19;
     private final double restPosition = 0.6;
     private final double depositPosition = 0.95;
+    public static double frieren = 0.20;
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -61,13 +63,14 @@ public class Intake {
     }
 
     public void restPosition() {
-        setSmallHinge(0.3);
-        setBigHinge(0.3);
+        setSmallHinge(0);
+        setBigHinge(0.4);
+        horiWrist();
     }
 
     public void intakePosition(boolean a) {
-        setSmallHinge(0.3);
-        setBigHinge(0.3);
+        setSmallHinge(0);
+        setBigHinge(frieren);
         if (a) {
             horiWrist();
         } else {
@@ -76,28 +79,28 @@ public class Intake {
     }
 
     public void samplePosition() {
-        setSmallHinge(0.3);
-        setBigHinge(0.3);
+        setSmallHinge(0.6);
+        setBigHinge(0.6);
         horiWrist();
     }
     public void specimenPosition() {
-        setSmallHinge(0.3);
-        setBigHinge(0.3);
+        setSmallHinge(0.6);
+        setBigHinge(0.6);
         horiWrist();
     }
     public void openClaw() {
-        claw.setPosition(0.3);
+        claw.setPosition(0.2);
     }
 
     public void closeClaw() {
-        claw.setPosition(0.3);
+        claw.setPosition(0.9);
     }
 
     public void horiWrist() {
-        wrist.setPosition(0.3);
+        wrist.setPosition(0.05);
     }
     public void vertiWrist() {
-        wrist.setPosition(0.3);
+        wrist.setPosition(0.1);
     }
 
 

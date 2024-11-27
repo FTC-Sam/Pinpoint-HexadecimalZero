@@ -32,7 +32,7 @@ public class ParkSideAuto extends LinearOpMode {
     private void initialize() {
         initialPose = new Pose2d(11.3, -61, Math.toRadians(180));
         drive = new PinpointDrive(hardwareMap, initialPose);
-        intake = new Intake(hardwareMap, this.telemetry,true);
+        intake = new Intake(hardwareMap, this.telemetry);
         horiSlides = new HoriSlides(hardwareMap, this.telemetry, true);
         vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
     }

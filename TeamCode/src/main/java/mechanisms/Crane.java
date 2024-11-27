@@ -16,10 +16,10 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     private Gamepad gamepad1;
     private Gamepad gamepad2;
     private int down = 50;
-    private int lowBucket = 2000;
-    private int highBucket = 4700;
-    private int lowBar = 500;
-    private int highBar = 1500;
+    private int lowBucket = 500;
+    private int highBucket = 1100;
+    private int lowBar = 400;
+    private int highBar = 900;
     private int climbHeight = 2000;
     private boolean isVertiManual = false; //stop pid when it's manual
     private enum CraneStates{
@@ -52,6 +52,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
+        timer1.startTime();
 
     }
 
@@ -97,7 +98,10 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
     public void presetVertiSlides() { //gamepad2 up, left, right, down, x
         if (horiSlides.isReset() && timer1.seconds() > 0.5) {
+
             if (gamepad2.dpad_up) {
+                telemetry.addLine("FUCK2");
+                telemetry.update();
                 vertiSlides.setTargetPos(highBucket);
                 currentState = CraneStates.EXTENSION;
                 currentDepositState = DepositState.SAMPLE;
@@ -173,16 +177,9 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
     //---------------------------------------------------------------------------------------------
     //ground mode related
-    public void manualHoriSlides() { //gamepad2 left_stick_y
-        if (-gamepad2.left_stick_y > 0.2 && horiSlides.getPosition() > -0.65) {
-            horiSlides.manualOut();
-        }
-        if (-gamepad2.left_stick_y < -0.2 && horiSlides.getPosition() < 0.75) {
-            horiSlides.manualIn();
-        }
-    }
+
     public void intake() { //gamepad1 a, right bumper, left bumper
-        if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.3) {
+        if ((horiSlides.getPosition() >= horiThreshold) && timer2.seconds() > 0.3) {
             if (gamepad1.a && !isArmButtonDown && !isArmDown) {
                 isArmDown = true;
                 isArmButtonDown = true;
