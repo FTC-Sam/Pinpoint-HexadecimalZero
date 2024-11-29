@@ -12,14 +12,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.PinpointDrive;
 
-import mechanisms.Intake;
 import mechanisms.HoriSlides;
+import mechanisms.Intake;
 import mechanisms.VertiSlides;
 
 
 @Config
-@Autonomous(name = "BucketAuto")
-public class BucketAuto extends LinearOpMode {
+@Autonomous(name = "BarBucketAuto")
+public class BarBucketAuto extends LinearOpMode {
 
     private PinpointDrive drive;
     private Pose2d initialPose;
@@ -27,10 +27,11 @@ public class BucketAuto extends LinearOpMode {
     private HoriSlides horiSlides;
     private VertiSlides vertiSlides;
     private Action trajectory;
+    public static int breach = 1000;
 
 
     private void initialize() {
-        initialPose = new Pose2d(-32, -61, Math.toRadians(180));
+        initialPose = new Pose2d(-9, -60, Math.toRadians(270));
         drive = new PinpointDrive(hardwareMap, initialPose);
         intake = new Intake(hardwareMap, this.telemetry);
         horiSlides = new HoriSlides(hardwareMap, this.telemetry, true);
@@ -39,25 +40,27 @@ public class BucketAuto extends LinearOpMode {
 
     private void buildTrajectories() {
         TrajectoryActionBuilder trajectoryHolder = drive.actionBuilder(initialPose)
-                .afterTime(0, horiSlides.runHoriSlidesAuto(0.35))
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
+                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.REST))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(1200))
-                .strafeToLinearHeading(new Vector2d(-33, -56), Math.toRadians(180))
-                .strafeToLinearHeading(new Vector2d(-53, -52.1), Math.toRadians(225))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(breach))
+                .waitSeconds(1)
+                .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
+                .waitSeconds(1)
+                .strafeToLinearHeading(new Vector2d(-8, -49.5), Math.toRadians(270))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(800))
+                .waitSeconds(1)
+                .afterTime(0, horiSlides.runHoriSlidesAuto(0.55))
                 .waitSeconds(0.5)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .waitSeconds(0.1)
-
-
-                .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.REST))
-                .afterTime(0.5, vertiSlides.runVertiSlidesAuto(130))
+                .waitSeconds(0.5)
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(130))
+                .afterTime(0, horiSlides.runHoriSlidesAuto(0.35))
 
                 .strafeToLinearHeading(new Vector2d(-47.5, -44.2), Math.toRadians(268))
                 .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
                 .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.INTAKE))
                 .waitSeconds(1)
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(0))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(-50))
                 .afterTime(0.4, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
                 .waitSeconds(1)
 
@@ -77,7 +80,7 @@ public class BucketAuto extends LinearOpMode {
                 .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
                 .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.INTAKE))
                 .waitSeconds(1)
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(0))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(-200))
                 .afterTime(0.4, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
                 .waitSeconds(1)
 
@@ -91,7 +94,7 @@ public class BucketAuto extends LinearOpMode {
                 .waitSeconds(0.3)
 
                 .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.REST))
-                .afterTime(0.5, vertiSlides.runVertiSlidesAuto(0))
+                .afterTime(0.5, vertiSlides.runVertiSlidesAuto(-200))
 
                 .strafeToLinearHeading(new Vector2d(-56, -42.5), Math.toRadians(295))
                 .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
@@ -110,7 +113,7 @@ public class BucketAuto extends LinearOpMode {
                 .waitSeconds(0.2)
 
                 .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.REST))
-                .afterTime(0.5, vertiSlides.runVertiSlidesAuto(0));
+                .afterTime(0.5, vertiSlides.runVertiSlidesAuto(-30));
 
                 /*.afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.ARMUP))
                 .afterTime(0, horiSlides.runHoriSlidesAuto(1))

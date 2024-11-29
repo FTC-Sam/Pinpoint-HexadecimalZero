@@ -22,13 +22,12 @@ public class Intake {
     public ServoImplEx wrist;
     public ServoImplEx claw;
     public enum AutoActionModes {
-        ARMDOWN,
-        ARMUP,
+        OPENCLAW,
+        CLOSECLAW,
         INTAKE,
         REST,
         DEPOSIT,
-        OUTTAKE,
-        INTAKEHALF
+        INTAKELOL
     }
 
     private final double downPosition = 0.19;
@@ -120,26 +119,25 @@ public class Intake {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             switch (action) {
-                case ARMDOWN:
-                    //hinge.setPosition(0.17);
+                case OPENCLAW:
+                    openClaw();
                     break;
-                case ARMUP:
-                    //hinge.setPosition(restPosition);
+                case CLOSECLAW:
+                    closeClaw();
                     break;
                 case INTAKE:
-                    //spin.setPower(-0.8);
+                    intakePosition(true);
                     break;
                 case REST:
-                    //rest();
+                    restPosition();
                     break;
                 case DEPOSIT:
-                    //hinge.setPosition(depositPosition);
+                    samplePosition();
                     break;
-                case OUTTAKE:
-                    //outtake();
-                    break;
-                case INTAKEHALF:
-                    //spin.setPower(-0.5);
+                case INTAKELOL:
+                    setSmallHinge(0.15);
+                    setBigHinge(frieren);
+                    wrist.setPosition(0.04);
                     break;
             }
             return false;

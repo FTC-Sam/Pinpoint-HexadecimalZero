@@ -40,16 +40,13 @@ public class ParkSideAuto extends LinearOpMode {
     private void buildTrajectories() {
         TrajectoryActionBuilder trajectoryHolder = drive.actionBuilder(initialPose)
                 .afterTime(0, horiSlides.runHoriSlidesAuto(0.8))
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.ARMUP))
                 .strafeToLinearHeading(new Vector2d(35.3, -56), Math.toRadians(180))
                 .strafeToLinearHeading(new Vector2d(-55.7, -53.4), Math.toRadians(225))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(4700))
                 .waitSeconds(4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
-                .afterTime(1, intake.runBoxAuto(Intake.AutoActionModes.OUTTAKE))
 
                 .waitSeconds(2)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.ARMUP))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(0))
                 .afterTime(1, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
 
