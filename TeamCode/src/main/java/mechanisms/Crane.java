@@ -20,7 +20,9 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     private int highBucket = 1200;
     private int lowBar = 400;
     private int highBar = 900;
-    private int climbHeight = 2000;
+    private int climb_up = 200;
+
+    private int climb_down = 50;
     private boolean isVertiManual = false; //stop pid when it's manual
     private enum CraneStates{
         EXTENSION,
@@ -71,9 +73,11 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
             case CLIMB:
                 if (gamepad2.right_bumper) {
-
+                    vertiSlides.setClimbTargetPos(4000);
+                } else if (gamepad2.left_bumper) {
+                    vertiSlides.setClimbTargetPos(1000);
                 }
-
+                vertiSlides.climbUpdate();
                 return;
         }
         manualVertiSlides(); //works any time
@@ -90,7 +94,10 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
 
     public void checkClimb() {
-        if(gamepad2.share && gamepad2.start){
+        if(gamepad2.start && gamepad2.back){
+
+            telemetry.addLine("switching to climb");
+            telemetry.update();
             currentState = CraneStates.CLIMB;
         }
     }

@@ -33,9 +33,9 @@ public class Intake {
     private final double downPosition = 0.19;
     private final double restPosition = 0.6;
     private final double depositPosition = 0.95;
-    public static double frieren = 0.20;
+    public static double frieren = 0.18;
 
-    public static double temp = 0.18;
+    public static double temp = 0.10;
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -90,18 +90,18 @@ public class Intake {
         horiWrist();
     }
     public void openClaw() {
-        claw.setPosition(0.2);
+        claw.setPosition(0.3);
     }
 
     public void closeClaw() {
-        claw.setPosition(0.9);
+        claw.setPosition(0.5);
     }
 
     public void horiWrist() {
         wrist.setPosition(0.05);
     }
     public void vertiWrist() {
-        wrist.setPosition(0.1);
+        wrist.setPosition(0.5);
     }
 
 

@@ -21,13 +21,19 @@ public class VertiSlides {
     private DcMotorEx climb;
 
     private int targetPos;
+
+    private int climbTargetPos;
+
+    private double kpClimbUp;
+
+    private double kpClimbDown;
     private ElapsedTime timer = new ElapsedTime();
     private double integralSum = 0;
     private double lastError = 0;
     private Telemetry telemetry;
 
     public static double kpu = 0.005;
-    public static double kpd = 0.0000001;
+    public static double kpd = 0.0000002;
 
     public static double ki = 0.0000000000;
     public static double kd = 0.000000;
@@ -52,8 +58,8 @@ public class VertiSlides {
         slideTop.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         slideMid.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         slideBot.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        climb.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
+        climb.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        //climb.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
 
@@ -62,6 +68,19 @@ public class VertiSlides {
 
         this.telemetry = telemetry;
         targetPos = 0;
+    }
+
+    public void climbUpdate(){
+        int tolerance = 0;
+        if ((getClimbCurrentPos() - climbTargetPos) < -tolerance) {
+            climb.setPower(returnClimbPower());
+        }
+        else if ((getClimbCurrentPos() - climbTargetPos) > tolerance) {
+            climb.setPower(returnClimbPower());
+        }
+        else {
+            climb.setPower(0);
+        }
     }
 
     public void update() {
@@ -89,6 +108,21 @@ public class VertiSlides {
 
         }
     }
+
+    public void climbManualUp(){
+        telemetry.addData("climb encoder", climb.getCurrentPosition());
+        telemetry.update();
+        climb.setPower(1);
+    }
+
+    public void climbManualDown(){
+        climb.setPower(-1);
+    }
+
+    public void setClimbPos(){
+        climb.setTargetPosition(50);
+    }
+
 
     public void reset() {
         slideTop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -133,13 +167,33 @@ public class VertiSlides {
         this.targetPos = targetPos;
     }
 
+    public void setClimbTargetPos(int targetPos) {
+        this.climbTargetPos = targetPos;
+    }
+
     public int getCurrentPos() {
         return (Math.abs(slideTop.getCurrentPosition()));
     }
+
+    public int getClimbCurrentPos() {
+        return (Math.abs(climb.getCurrentPosition()));
+    }
+
     public int getTargetPos() {
         return targetPos;
     }
 
+    private double returnClimbPower(){
+        double currentPos = getClimbCurrentPos();
+        double error = climbTargetPos - currentPos;
+        lastError = error;
+        timer.reset();
+        telemetry.addData("Slide Position", getClimbCurrentPos());
+        telemetry.addData("climb target", climbTargetPos);
+        telemetry.addData("error: ", error);
+        telemetry.update();
+        return ((error * kpu));
+    }
 
     private double returnPowerUp(){
         double currentPos = getCurrentPos();
