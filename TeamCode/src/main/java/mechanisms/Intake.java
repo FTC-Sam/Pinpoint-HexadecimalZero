@@ -35,6 +35,8 @@ public class Intake {
     private final double depositPosition = 0.95;
     public static double frieren = 0.20;
 
+    public static double temp = 0.18;
+
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
 
@@ -54,22 +56,22 @@ public class Intake {
 
     public void setSmallHinge(double a) {
         smallHingeRight.setPosition(a);
-        smallHingeLeft.setPosition(a);
+        smallHingeLeft.setPosition(a - (a == .5?.01:0));
     }
     public void setBigHinge(double a) {
         bigHingeRight.setPosition(a);
-        bigHingeLeft.setPosition(a);
+        bigHingeLeft.setPosition(a+.01);
     }
 
     public void restPosition() {
-        setSmallHinge(0);
+        setSmallHinge(temp);
         setBigHinge(0.4);
         horiWrist();
     }
 
     public void intakePosition(boolean a) {
-        setSmallHinge(0);
-        setBigHinge(frieren);
+        setSmallHinge(temp);
+        setBigHinge( frieren);
         if (a) {
             horiWrist();
         } else {
@@ -135,7 +137,7 @@ public class Intake {
                     samplePosition();
                     break;
                 case INTAKELOL:
-                    setSmallHinge(0.15);
+                    setSmallHinge(0.09);
                     setBigHinge(frieren);
                     wrist.setPosition(0.04);
                     break;
