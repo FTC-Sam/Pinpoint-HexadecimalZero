@@ -27,7 +27,10 @@ public class Intake {
         INTAKE,
         REST,
         DEPOSIT,
-        INTAKELOL
+        INTAKELOL,
+        DEPOSITDEPOSIT,
+        RESTLOL,
+        FLIPWRISTDEPOSIT
     }
 
     private final double downPosition = 0.19;
@@ -51,6 +54,30 @@ public class Intake {
         wrist = (ServoImplEx) hardwareMap.servo.get("wrist");
 
         claw = (ServoImplEx) hardwareMap.servo.get("claw");
+
+    }
+
+    public Intake(HardwareMap hardwareMap, Telemetry telemetry, boolean t) {
+        this.telemetry = telemetry;
+
+        smallHingeRight = (ServoImplEx) hardwareMap.servo.get("smallHingeRight");
+        smallHingeLeft = (ServoImplEx) hardwareMap.servo.get("smallHingeLeft");
+        smallHingeLeft.setDirection(ServoImplEx.Direction.REVERSE);
+
+        bigHingeRight = (ServoImplEx) hardwareMap.servo.get("bigHingeRight");
+        bigHingeLeft = (ServoImplEx) hardwareMap.servo.get("bigHingeLeft");
+        bigHingeLeft.setDirection(ServoImplEx.Direction.REVERSE);
+
+        wrist = (ServoImplEx) hardwareMap.servo.get("wrist");
+
+        claw = (ServoImplEx) hardwareMap.servo.get("claw");
+
+
+        setBigHinge(0.1);
+        setSmallHinge(0.85);
+        horiWrist();
+
+        closeClaw();
 
     }
 
@@ -80,17 +107,17 @@ public class Intake {
     }
 
     public void samplePosition() {
-        setSmallHinge(0.6);
         setBigHinge(0.6);
+        setSmallHinge(0.6);
         horiWrist();
     }
     public void specimenPosition() {
-        setSmallHinge(0.6);
+        setSmallHinge(0.7);
         setBigHinge(0.6);
         horiWrist();
     }
     public void openClaw() {
-        claw.setPosition(0.3);
+        claw.setPosition(0.2);
     }
 
     public void closeClaw() {
@@ -102,6 +129,10 @@ public class Intake {
     }
     public void vertiWrist() {
         wrist.setPosition(0.5);
+    }
+
+    public void horiWristOtherWay() {
+        wrist.setPosition(0.95);
     }
 
 
@@ -136,10 +167,23 @@ public class Intake {
                 case DEPOSIT:
                     samplePosition();
                     break;
+                case DEPOSITDEPOSIT:
+                    setSmallHinge(0.6);
+                    setBigHinge(0.9);
+                    break;
                 case INTAKELOL:
-                    setSmallHinge(0.09);
-                    setBigHinge(frieren);
-                    wrist.setPosition(0.04);
+                    setSmallHinge(0.5);
+                    setBigHinge(0.1);
+                    break;
+                case RESTLOL:
+                    setBigHinge(0.1);
+                    setSmallHinge(0.85);
+                    horiWrist();
+                    break;
+                case FLIPWRISTDEPOSIT:
+                    setBigHinge(0.6);
+                    setSmallHinge(0.6);
+                    wrist.setPosition(0.75);
                     break;
             }
             return false;
