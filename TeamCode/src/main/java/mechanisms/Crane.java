@@ -72,15 +72,15 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                 break;
 
             case CLIMB:
-                if (gamepad2.right_bumper) {
+                if (gamepad1.right_bumper) {
                     vertiSlides.setClimbTargetPos(4000);
-                } else if (gamepad2.left_bumper) {
+                } else if (gamepad1.left_bumper) {
                     vertiSlides.setClimbTargetPos(1000);
                 }
                 vertiSlides.climbUpdate();
                 return;
         }
-        manualVertiSlides(); //works any time
+        //manualVertiSlides(); //works any time
         presetVertiSlides(); //works only if horizontal slides retracted, meaning also not intake and outtake by logic check
         checkClimb();
         if (!isVertiManual) vertiSlides.update();
@@ -94,7 +94,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
 
     public void checkClimb() {
-        if(gamepad2.start && gamepad2.back){
+        if(gamepad1.start && gamepad1.back){
 
             telemetry.addLine("switching to climb");
             telemetry.update();
@@ -106,29 +106,24 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     public void presetVertiSlides() { //gamepad2 up, left, right, down, x
         if (horiSlides.isReset() && timer1.seconds() > 0.5) {
 
-            if (gamepad2.dpad_up) {
+            if (gamepad1.dpad_up) {
                 telemetry.addLine("FUCK2");
                 telemetry.update();
                 vertiSlides.setTargetPos(highBucket);
                 currentState = CraneStates.EXTENSION;
                 currentDepositState = DepositState.SAMPLE;
             }
-            if (gamepad2.dpad_left) {
+            if (gamepad1.dpad_left) {
                 vertiSlides.setTargetPos(lowBucket);
                 currentState = CraneStates.EXTENSION;
                 currentDepositState = DepositState.SAMPLE;
             }
-            if (gamepad2.dpad_right) {
+            if (gamepad1.dpad_right) {
                 vertiSlides.setTargetPos(highBar);
                 currentState = CraneStates.EXTENSION;
                 currentDepositState = DepositState.SPECIMEN;
             }
-            if (gamepad2.x) {
-                vertiSlides.setTargetPos(lowBar);
-                currentState = CraneStates.EXTENSION;
-                currentDepositState = DepositState.SPECIMEN;
-            }
-            if (gamepad2.dpad_down) {
+            if (gamepad1.dpad_down) {
                 vertiSlides.setTargetPos(down);
                 currentState = CraneStates.GROUND;
             }
@@ -221,15 +216,15 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     }
 
     public void setWristMode() {
-        if (gamepad1.b && !isWristButtonDown && !wristMode) {
+        if (gamepad1.x && !isWristButtonDown && !wristMode) {
             wristMode = true;
             isWristButtonDown = true;
         }
-        else if (gamepad1.b && !isWristButtonDown && wristMode) {
+        else if (gamepad1.x && !isWristButtonDown && wristMode) {
             wristMode = false;
             isWristButtonDown = true;
         }
-        else if (!gamepad1.b) {
+        else if (!gamepad1.x) {
             isWristButtonDown = false;
         }
     }
@@ -238,14 +233,14 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
 
     public void presetHoriSlides() { //gamepad2 y, b
-        if (gamepad2.b) {
+        if (gamepad1.b) {
 
             horiSlides.in();
             timer1.reset();
             timer1.startTime();
 
         }
-        else if (gamepad2.y) {
+        else if (gamepad1.y) {
             horiSlides.out();
             timer2.reset();
             timer2.startTime();
