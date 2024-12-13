@@ -76,10 +76,10 @@ public class SpecimanAuto extends LinearOpMode {
 
 
                 .strafeToLinearHeading(new Vector2d(61, -45), Math.toRadians(90))
-                .strafeToLinearHeading(new Vector2d(52, -42.8), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(52, -43), Math.toRadians(90))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(140))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(150))
                 .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
                 .waitSeconds(.5)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
@@ -109,7 +109,7 @@ public class SpecimanAuto extends LinearOpMode {
 
 
 
-                .strafeToLinearHeading(new Vector2d(46, -41.8), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(46, -42), Math.toRadians(90))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(155))
@@ -151,7 +151,7 @@ public class SpecimanAuto extends LinearOpMode {
 
 
 
-                .strafeToLinearHeading(new Vector2d(46, -41.1), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(46, -41.2), Math.toRadians(90))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(160))
@@ -163,7 +163,7 @@ public class SpecimanAuto extends LinearOpMode {
                 .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
                 .afterTime(0.3, vertiSlides.runVertiSlidesAuto(570))
                 .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
-                .strafeToLinearHeading(new Vector2d(-9, -36.3), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
+                .strafeToLinearHeading(new Vector2d(-7, -36.3), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
 
                 .waitSeconds(0.4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
