@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 @Config
 public class VertiSlides {
@@ -84,13 +85,18 @@ public class VertiSlides {
     }
 
     public void update() {
+        telemetry.addData("SlideTop", slideTop.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("SlideMid", slideMid.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("SlideBot", slideBot.getCurrent(CurrentUnit.AMPS));
+        telemetry.update();
+
         int tolerance = 0;
 
-        /*if ((getCurrentPos() - targetPos) < -200) {
+        if ((getCurrentPos() - targetPos) < -200) {
             slideTop.setPower(1);
             slideMid.setPower(1);
             slideBot.setPower(1);
-        }*/
+        }
         if ((getCurrentPos() - targetPos) < -tolerance) {
             slideTop.setPower(returnPowerUp());
             slideMid.setPower(returnPowerUp());

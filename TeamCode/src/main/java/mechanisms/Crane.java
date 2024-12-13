@@ -15,7 +15,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     public VertiSlides vertiSlides;
     private Gamepad gamepad1;
     private Gamepad gamepad2;
-    private int down = 50;
+    private int down = 0;
     private int lowBucket = 500;
     private int highBucket = 1200;
     private int lowBar = 400;

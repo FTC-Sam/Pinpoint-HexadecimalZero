@@ -163,7 +163,9 @@ public class Intake {
                     setBigHinge(-0.8);
                     break;
                 case REST:
-                    restPosition();
+                    setSmallHinge(.5);
+                    setBigHinge(0.1);
+                    horiWrist();
                     break;
                 case DEPOSIT:
                     setBigHinge(0.6);
@@ -172,7 +174,7 @@ public class Intake {
                     break;
                 case DEPOSITDEPOSIT:
                     setSmallHinge(0.6);
-                    setBigHinge(0.9);
+                    setBigHinge(1);
                     break;
                 case INTAKELOL:
                     setSmallHinge(0.5);
