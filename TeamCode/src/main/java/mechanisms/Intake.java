@@ -159,13 +159,16 @@ public class Intake {
                     closeClaw();
                     break;
                 case INTAKE:
-                    intakePosition(true);
+                    setSmallHinge(0.4);
+                    setBigHinge(-0.8);
                     break;
                 case REST:
                     restPosition();
                     break;
                 case DEPOSIT:
-                    samplePosition();
+                    setBigHinge(0.6);
+                    setSmallHinge(0.65);
+                    horiWrist();
                     break;
                 case DEPOSITDEPOSIT:
                     setSmallHinge(0.6);
@@ -182,7 +185,7 @@ public class Intake {
                     break;
                 case FLIPWRISTDEPOSIT:
                     setBigHinge(0.6);
-                    setSmallHinge(0.6);
+                    setSmallHinge(0.65);
                     wrist.setPosition(0.75);
                     break;
             }
@@ -190,6 +193,6 @@ public class Intake {
         }
     }
     public Action runBoxAuto(AutoActionModes action) {
-        return new BoxAutoAction(action);
+            return new BoxAutoAction(action);
     }
 }
