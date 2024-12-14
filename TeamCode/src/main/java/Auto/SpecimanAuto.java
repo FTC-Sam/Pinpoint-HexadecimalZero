@@ -39,20 +39,20 @@ public class SpecimanAuto extends LinearOpMode {
         TrajectoryActionBuilder trajectoryHolder = drive.actionBuilder(initialPose)
 
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
-                .afterTime(0.2, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .afterTime(0.2, horiSlides.runHoriSlidesAuto(0.35))
-                .afterTime(0.5, vertiSlides.runVertiSlidesAuto(570))
+                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
+                .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.in))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(1742))
                 .waitSeconds(.5)
 
-                .strafeToLinearHeading(new Vector2d(9, -43.95), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(9, -43.45), Math.toRadians(90))
                 .waitSeconds(0.4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(200))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(470))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
-                .waitSeconds(0.4)
+                .waitSeconds(0.3)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
                 .waitSeconds(0)
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(HoriSlides.in))
                 .strafeToLinearHeading(new Vector2d(9, -43), Math.toRadians(90))
 
 
@@ -76,28 +76,30 @@ public class SpecimanAuto extends LinearOpMode {
 
 
                 .strafeToLinearHeading(new Vector2d(61, -45), Math.toRadians(90))
-                .strafeToLinearHeading(new Vector2d(52, -43), Math.toRadians(90))
+                .strafeToLinearHeading(new Vector2d(49.5, -43.7), Math.toRadians(90))  //GRAB POS
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(150))
-                .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
-                .waitSeconds(.5)
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(449))
+                .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.out))
+                .waitSeconds(.6)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .waitSeconds(.3)
+                .waitSeconds(.2)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.RESTLOL))
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
-                .afterTime(0.3, vertiSlides.runVertiSlidesAuto(570))
-                .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
-                .strafeToLinearHeading(new Vector2d(2, -37.7), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(HoriSlides.in))
+                .afterTime(0.3, vertiSlides.runVertiSlidesAuto(1769))
+                .afterTime(1.2, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
+                .strafeToLinearHeading(new Vector2d(2, -44), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40)) // DESPOSIT POS
+                .waitSeconds(.01)
+                .strafeToLinearHeading(new Vector2d(2, -39.2), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
 
                 .waitSeconds(0.4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(200))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(400))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
-                .waitSeconds(0.4)
+                .waitSeconds(0.3)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
                 .waitSeconds(0)
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(HoriSlides.in))
                 .strafeToLinearHeading(new Vector2d(6, -43), Math.toRadians(90))
 
 
@@ -108,29 +110,29 @@ public class SpecimanAuto extends LinearOpMode {
 
 
 
-
-                .strafeToLinearHeading(new Vector2d(46, -42), Math.toRadians(90))
+                //second cycle
+                .strafeToLinearHeading(new Vector2d(46, -42.5), Math.toRadians(93))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(155))
-                .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
-                .waitSeconds(.5)
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(458))
+                .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.out))
+                .waitSeconds(.6)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .waitSeconds(.3)
+                .waitSeconds(.2)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.RESTLOL))
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
-                .afterTime(0.3, vertiSlides.runVertiSlidesAuto(570))
-                .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
-                .strafeToLinearHeading(new Vector2d(0, -37.3), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(HoriSlides.in))
+                .afterTime(0.3, vertiSlides.runVertiSlidesAuto(1789))
+                .afterTime(0.8, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
+                .strafeToLinearHeading(new Vector2d(-3, -37.5), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
 
                 .waitSeconds(0)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(200))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(400))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
-                .waitSeconds(0.4)
+                .waitSeconds(0.3)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
                 .waitSeconds(0)
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(HoriSlides.in))
                 .strafeToLinearHeading(new Vector2d(6, -42.7), Math.toRadians(90))
 
 
@@ -150,37 +152,37 @@ public class SpecimanAuto extends LinearOpMode {
 
 
 
-
-                .strafeToLinearHeading(new Vector2d(46, -41.2), Math.toRadians(90))
+                //Third cycle
+                .strafeToLinearHeading(new Vector2d(46, -42.5), Math.toRadians(93)) //supposed to be y=-41
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(160))
-                .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
-                .waitSeconds(.5)
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(449))
+                .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.out))
+                .waitSeconds(.6)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .waitSeconds(.3)
+                .waitSeconds(.2)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.RESTLOL))
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
-                .afterTime(0.3, vertiSlides.runVertiSlidesAuto(570))
-                .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
-                .strafeToLinearHeading(new Vector2d(-7, -36.3), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(HoriSlides.in))
+                .afterTime(0.3, vertiSlides.runVertiSlidesAuto(1799))
+                .afterTime(0.8, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
+                .strafeToLinearHeading(new Vector2d(-7, -37.65), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
 
                 .waitSeconds(0.4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(200))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(400))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
-                .waitSeconds(0.4)
+                .waitSeconds(0.3)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
                 .waitSeconds(0)
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
-                .strafeToLinearHeading(new Vector2d(0, -42.7), Math.toRadians(90))
+                .afterTime(0.2, vertiSlides.runVertiSlidesAuto(0))
+                .afterTime(0.3, horiSlides.runHoriSlidesAuto(HoriSlides.in))
+                .strafeToLinearHeading(new Vector2d(47.5, -55.2), Math.toRadians(200),  new TranslationalVelConstraint(150), new ProfileAccelConstraint(-150, 150))
+                .afterTime(0, horiSlides.runHoriSlidesAuto(0.5))
 
 
-                .afterTime(0.1, vertiSlides.runVertiSlidesAuto(0))
-                .afterTime(0.1, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .afterTime(0.1, intake.runBoxAuto(Intake.AutoActionModes.REST))
+                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
+                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.REST));
 
-                .strafeToLinearHeading(new Vector2d(47.5, -55.2), Math.toRadians(90));
 
 
 
