@@ -21,6 +21,8 @@ public class Intake {
 
     public ServoImplEx wrist;
     public ServoImplEx claw;
+    public CRServoImplEx spinRight;
+    public CRServoImplEx spinLeft;
     public enum AutoActionModes {
         OPENCLAW,
         CLOSECLAW,
@@ -55,6 +57,13 @@ public class Intake {
 
         claw = (ServoImplEx) hardwareMap.servo.get("claw");
 
+        spinRight = (CRServoImplEx) hardwareMap.crservo.get("spinRight");
+        spinLeft = (CRServoImplEx) hardwareMap.crservo.get("spinLeft");
+        spinLeft.setDirection(CRServoImplEx.Direction.REVERSE);
+
+
+
+
     }
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry, boolean t) {
@@ -71,6 +80,9 @@ public class Intake {
         wrist = (ServoImplEx) hardwareMap.servo.get("wrist");
 
         claw = (ServoImplEx) hardwareMap.servo.get("claw");
+        spinRight = (CRServoImplEx) hardwareMap.crservo.get("spinRight");
+        spinLeft = (CRServoImplEx) hardwareMap.crservo.get("spinLeft");
+        spinLeft.setDirection(CRServoImplEx.Direction.REVERSE);
 
 
         setBigHinge(0.1);
@@ -135,6 +147,21 @@ public class Intake {
         wrist.setPosition(0.95);
     }
 
+    public void spinIn() {
+        spinLeft.setPower(1);
+        spinRight.setPower(1);
+    }
+
+    public void spinOut() {
+        spinLeft.setPower(-1);
+        spinRight.setPower(-1);
+    }
+
+    public void spinStop() {
+        spinLeft.setPower(0);
+        spinRight.setPower(0);
+    }
+
 
 
 
@@ -159,12 +186,12 @@ public class Intake {
                     closeClaw();
                     break;
                 case INTAKE:
-                    setSmallHinge(0.1);
-                    setBigHinge(0.18);
+                    setSmallHinge(0.4);
+                    setBigHinge(-0.8);
                     break;
                 case REST:
                     setSmallHinge(.5);
-                    setBigHinge(0.11);
+                    setBigHinge(0.1);
                     horiWrist();
                     break;
                 case DEPOSIT:
@@ -174,11 +201,11 @@ public class Intake {
                     break;
                 case DEPOSITDEPOSIT:
                     setSmallHinge(0.6);
-                    setBigHinge(0.8);
+                    setBigHinge(1);
                     break;
                 case INTAKELOL:
                     setSmallHinge(0.5);
-                    setBigHinge(0.11);
+                    setBigHinge(0.1);
                     break;
                 case RESTLOL:
                     setBigHinge(0.1);
@@ -195,6 +222,6 @@ public class Intake {
         }
     }
     public Action runBoxAuto(AutoActionModes action) {
-            return new BoxAutoAction(action);
+        return new BoxAutoAction(action);
     }
 }

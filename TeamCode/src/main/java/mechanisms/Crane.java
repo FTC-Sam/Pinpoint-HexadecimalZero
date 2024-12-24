@@ -219,16 +219,30 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
             if (isArmDown) {
                 intake.intakePosition(wristMode);
-                if (gamepad1.right_bumper&&!americanGirl.right_bumper&&!isClawClosed) {
+                if (gamepad1.right_bumper) {
+                    intake.openClaw();
+                    intake.spinIn();
+                }
+                else if (gamepad1.left_bumper) {
+                    intake.openClaw();
+                    intake.spinOut();
+                }
+                else {
+                    intake.closeClaw();
+                    intake.spinStop();
+                }
+                /*if (gamepad1.right_bumper&&!americanGirl.right_bumper&&!isClawClosed) {
                     intake.closeClaw();
                     isClawClosed=!isClawClosed;
                 } else if (gamepad1.right_bumper&&!americanGirl.right_bumper&&isClawClosed) {
                     intake.openClaw();
                     isClawClosed=!isClawClosed;
-                }
+                }*/
             }
             else {
+                intake.spinStop();
                 intake.restPosition();
+                intake.closeClaw();
             }
         }
         else {
@@ -237,6 +251,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             intake.closeClaw();
             isClawClosed=true;
             intake.restPosition();
+
         }
     }
 
