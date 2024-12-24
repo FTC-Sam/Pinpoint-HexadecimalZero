@@ -159,12 +159,12 @@ public class Intake {
                     closeClaw();
                     break;
                 case INTAKE:
-                    setSmallHinge(0.4);
-                    setBigHinge(-0.8);
+                    setSmallHinge(0.1);
+                    setBigHinge(0.18);
                     break;
                 case REST:
                     setSmallHinge(.5);
-                    setBigHinge(0.1);
+                    setBigHinge(0.11);
                     horiWrist();
                     break;
                 case DEPOSIT:
@@ -174,11 +174,11 @@ public class Intake {
                     break;
                 case DEPOSITDEPOSIT:
                     setSmallHinge(0.6);
-                    setBigHinge(1);
+                    setBigHinge(0.8);
                     break;
                 case INTAKELOL:
                     setSmallHinge(0.5);
-                    setBigHinge(0.1);
+                    setBigHinge(0.11);
                     break;
                 case RESTLOL:
                     setBigHinge(0.1);

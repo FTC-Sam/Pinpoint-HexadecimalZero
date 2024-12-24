@@ -16,10 +16,10 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     private Gamepad gamepad1;
     private Gamepad gamepad2;
     private int down = 0;
-    private int lowBucket = 500;
-    private int highBucket = 1200;
-    private int lowBar = 400;
-    private int highBar = 900;
+    private int lowBucket = 1500;
+    private int highBucket = 4080;
+    private int lowBar = 1482;
+    private int highBar = 3335;
     private int climb_up = 200;
 
     private int climb_down = 50;
@@ -181,7 +181,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     //ground mode related
 
     public void intake() { //gamepad1 a, right bumper, left bumper
-        if ((horiSlides.getPosition() >= horiThreshold) && timer2.seconds() > 0.3) {
+        if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.3) {
             if (gamepad1.a && !isArmButtonDown && !isArmDown) {
                 isArmDown = true;
                 isArmButtonDown = true;
