@@ -1,6 +1,9 @@
 package mechanisms;
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -8,22 +11,31 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Crane { //I got rid of hardwareMap variable and wanna try it as a disposable
-                     //constructor variable since it's only needed during initialization
+    //constructor variable since it's only needed during initialization
     private Telemetry telemetry;
     public Intake intake;
     public HoriSlides horiSlides;
     public VertiSlides vertiSlides;
     private Gamepad gamepad1;
+
+    private Gamepad americanGirl= new Gamepad();
+
+    private Gamepad Indra= new Gamepad();
     private Gamepad gamepad2;
-    private int down = 0;
-    private int lowBucket = 1500;
-    private int highBucket = 4080;
-    private int lowBar = 1482;
-    private int highBar = 3335;
+    private int down = 50;
+
+    private int lowBucket = 2000;
+    private int highBucket = 4600;
+    private int lowBar = 400;
+    private int highBar = 900;
     private int climb_up = 200;
 
     private int climb_down = 50;
     private boolean isVertiManual = false; //stop pid when it's manual
+
+    private boolean isHoriExtended=false;
+
+    private boolean isClawClosed=true;
     private enum CraneStates{
         EXTENSION,
         GROUND,
@@ -59,6 +71,10 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     }
 
     public void executeTeleOp() {
+        //fight me Sam
+        americanGirl.copy(Indra);
+        Indra.copy(gamepad1);
+
         switch (currentState) {
             case GROUND:
                 setWristMode();
@@ -73,14 +89,14 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
             case CLIMB:
                 if (gamepad1.right_bumper) {
-                    vertiSlides.setClimbTargetPos(4000);
+                    vertiSlides.setClimbTargetPos(5000);
                 } else if (gamepad1.left_bumper) {
-                    vertiSlides.setClimbTargetPos(1000);
+                    vertiSlides.setClimbTargetPos(1560);
                 }
                 vertiSlides.climbUpdate();
                 return;
         }
-        //manualVertiSlides(); //works any time
+        manualVertiSlides(); //works any time
         presetVertiSlides(); //works only if horizontal slides retracted, meaning also not intake and outtake by logic check
         checkClimb();
         if (!isVertiManual) vertiSlides.update();
@@ -107,7 +123,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         if (horiSlides.isReset() && timer1.seconds() > 0.5) {
 
             if (gamepad1.dpad_up) {
-                telemetry.addLine("FUCK2");
+                telemetry.addLine("yep");
                 telemetry.update();
                 vertiSlides.setTargetPos(highBucket);
                 currentState = CraneStates.EXTENSION;
@@ -131,11 +147,11 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     }
 
     public void manualVertiSlides() { //gamepad2 right_stick_y
-        if (-gamepad2.right_stick_y > 0.2) {
+        if (-gamepad1.right_trigger > 0.2) {
             vertiSlides.manualUp();
             isVertiManual = true;
         }
-        else if (-gamepad2.right_stick_y < -0.2) {
+        else if (-gamepad1.left_trigger < -0.2) {
             vertiSlides.manualDown();
             isVertiManual = true;
         }
@@ -152,21 +168,25 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     public void setArm() {
         if (currentDepositState == DepositState.SAMPLE) { //can add and here to threshold arm flipping
             intake.samplePosition();
+
         }
         if (currentDepositState == DepositState.SPECIMEN) {
             intake.specimenPosition();
         }
         if (vertiSlides.getTargetPos() == down) {
             intake.closeClaw();
+            isClawClosed=true;
             intake.restPosition();
         }
     }
 
     public void deposit() { //gamepad2 a
-        if (gamepad1.right_bumper) {
+        if (gamepad1.right_bumper&&!americanGirl.right_bumper&&!isClawClosed) {
             intake.closeClaw();
-        } else if (gamepad1.left_bumper) {
+            isClawClosed=!isClawClosed;
+        } else if (gamepad1.right_bumper&&!americanGirl.right_bumper&&isClawClosed) {
             intake.openClaw();
+            isClawClosed=!isClawClosed;
         }
     }
 
@@ -185,6 +205,8 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             if (gamepad1.a && !isArmButtonDown && !isArmDown) {
                 isArmDown = true;
                 isArmButtonDown = true;
+                intake.openClaw();
+                isClawClosed=!isClawClosed;
             }
             else if (gamepad1.a && !isArmButtonDown && isArmDown) {
                 isArmDown = false;
@@ -197,10 +219,12 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
             if (isArmDown) {
                 intake.intakePosition(wristMode);
-                if (gamepad1.right_bumper) {
+                if (gamepad1.right_bumper&&!americanGirl.right_bumper&&!isClawClosed) {
                     intake.closeClaw();
-                } else if (gamepad1.left_bumper) {
+                    isClawClosed=!isClawClosed;
+                } else if (gamepad1.right_bumper&&!americanGirl.right_bumper&&isClawClosed) {
                     intake.openClaw();
+                    isClawClosed=!isClawClosed;
                 }
             }
             else {
@@ -211,6 +235,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             isArmDown = false;
             isArmButtonDown = false;
             intake.closeClaw();
+            isClawClosed=true;
             intake.restPosition();
         }
     }
@@ -233,18 +258,24 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
 
     public void presetHoriSlides() { //gamepad2 y, b
-        if (gamepad1.b) {
+        if (gamepad1.b&&!americanGirl.b&&isHoriExtended) {
 
             horiSlides.in();
             timer1.reset();
             timer1.startTime();
-
+            telemetry.addLine("Extended: "+isHoriExtended);
+            telemetry.addLine("American Girl: "+americanGirl.b);
+            telemetry.update();
+            isHoriExtended=false;
         }
-        else if (gamepad1.y) {
+        else if (gamepad1.b&&!americanGirl.b&&!isHoriExtended) {
             horiSlides.out();
             timer2.reset();
             timer2.startTime();
-
+            telemetry.addLine("Extended: "+isHoriExtended);
+            telemetry.addLine("American Girl: "+americanGirl.b);
+            telemetry.update();
+            isHoriExtended=true;
         }
     }
 }

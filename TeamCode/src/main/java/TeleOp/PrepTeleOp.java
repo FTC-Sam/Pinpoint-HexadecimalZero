@@ -33,6 +33,7 @@ public class PrepTeleOp extends LinearOpMode {
     private ServoImplEx servoRight;
     private VertiSlides vertiSlides;
     private HoriSlides horiSlides;
+    private DcMotorEx climb;
 
     public static double servoIn = 0;
     public static double servoOut = 0.6;
@@ -71,7 +72,7 @@ public class PrepTeleOp extends LinearOpMode {
         wrist = (ServoImplEx) hardwareMap.servo.get("wrist");
         claw = (ServoImplEx) hardwareMap.servo.get("claw");
 
-
+        climb = (DcMotorEx) hardwareMap.dcMotor.get("climb");
         horiSlides = new HoriSlides(hardwareMap, telemetry);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
@@ -99,7 +100,7 @@ public class PrepTeleOp extends LinearOpMode {
             if (gamepad1.y) hinge.setPosition(servoDown); //0.559 intake
             //0.431 rest
             */
-            if (gamepad1.dpad_up) {
+            /*if (gamepad1.dpad_up) {
                 smallHingeRight.setPosition(servoIn);
                 smallHingeLeft.setPosition(servoIn);
                 bigHingeRight.setPosition(servoOut);
@@ -113,11 +114,11 @@ public class PrepTeleOp extends LinearOpMode {
                 wrist.setPosition(middleWristPos);
             }*/
 
-            if(gamepad1.left_trigger > 0.7 && wristPos> leftWristMax){
+            /*if(gamepad1.left_trigger > 0.7 && wristPos> leftWristMax){
                 wristPos -= 0.01;
                 wrist.setPosition(wristPos);
             }
-
+            /*
             if(gamepad1.right_trigger > 0.7 && wristPos < rightWristMax){
                 wristPos += 0.01;
                 wrist.setPosition(wristPos);
@@ -125,7 +126,7 @@ public class PrepTeleOp extends LinearOpMode {
 
             if (gamepad1.a) {
                 claw.setPosition(servoDown);
-            }
+            }*
 
 
 
@@ -136,7 +137,15 @@ public class PrepTeleOp extends LinearOpMode {
 
             vertiSlides.update();
             telemetry.update();
-            drivetrain.drive();
+            drivetrain.drive();*/
+            if(gamepad1.a) {
+                climb.setPower(-1);
+            }else if (gamepad1.b) {
+                climb.setPower(1);
+            }
+            else {
+                climb.setPower(0);
+            }
 
         }
 

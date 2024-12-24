@@ -10,13 +10,13 @@ public class Drivetrain {
     private DcMotorEx motorFrontLeft, motorBackLeft, motorFrontRight, motorBackRight;
     private Gamepad gamepad1;
     private Telemetry telemetry;
-    //private Crane crane;
+    private Crane crane;
 
     public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad/*, Crane crane*/) {
 
         this.gamepad1 = gamepad;
         this.telemetry = telemetry;
-        //this.crane = crane;
+        this.crane = crane;
 
         motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("FL");
         motorBackLeft = (DcMotorEx) hardwareMap.dcMotor.get("BL");
@@ -43,8 +43,8 @@ public class Drivetrain {
     public void drive() {
 
         double y =  -gamepad1.left_stick_y;// * (crane.vertiSlides.getCurrentPos() > 2000?.8:1); // Remember, this is reversed!
-        double x = gamepad1.left_stick_x;// * (crane.vertiSlides.getCurrentPos() > 2000?.8:1);
-        double rx = gamepad1.right_stick_x;// * (!crane.horiSlides.in?.7:1) * (crane.vertiSlides.getCurrentPos() > 2000?.9:1);
+        double x = gamepad1.left_stick_x; //* (crane.vertiSlides.getCurrentPos() > 2000?.8:1);
+        double rx = gamepad1.right_stick_x; //* (crane.horiSlides.in?.7:1) * (crane.vertiSlides.getCurrentPos() > 2000?.9:1);
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
 
         // Calculate the mecanum motor powers
@@ -81,7 +81,7 @@ public class Drivetrain {
         }
 
 
-        if(gamepad1.right_trigger>0.1){
+        if(gamepad1.left_bumper){
             motorFrontLeft.setPower(frontLeftPower*.4);
             motorBackLeft.setPower(backLeftPower*.4);
             motorFrontRight.setPower(frontRightPower*.4);

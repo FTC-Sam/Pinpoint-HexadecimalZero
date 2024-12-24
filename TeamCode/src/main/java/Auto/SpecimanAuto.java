@@ -47,7 +47,7 @@ public class SpecimanAuto extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(9, -43.45), Math.toRadians(90))
                 .waitSeconds(0.4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(470))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(300))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
                 .waitSeconds(0.3)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
@@ -79,7 +79,7 @@ public class SpecimanAuto extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(49.5, -43.7), Math.toRadians(90))  //GRAB POS
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(449))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(789))
                 .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.out))
                 .waitSeconds(.6)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
@@ -94,7 +94,7 @@ public class SpecimanAuto extends LinearOpMode {
 
                 .waitSeconds(0.4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(400))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(300))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
                 .waitSeconds(0.3)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
@@ -114,7 +114,7 @@ public class SpecimanAuto extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(46, -42.5), Math.toRadians(93))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(458))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(798))
                 .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.out))
                 .waitSeconds(.6)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
@@ -127,7 +127,7 @@ public class SpecimanAuto extends LinearOpMode {
 
                 .waitSeconds(0)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(400))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(300))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
                 .waitSeconds(0.3)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
@@ -156,7 +156,7 @@ public class SpecimanAuto extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(46, -42.5), Math.toRadians(93)) //supposed to be y=-41
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKELOL))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(449))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(799))
                 .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.out))
                 .waitSeconds(.6)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
@@ -169,7 +169,7 @@ public class SpecimanAuto extends LinearOpMode {
 
                 .waitSeconds(0.4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(400))
+                .afterTime(0, vertiSlides.runVertiSlidesAuto(300))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
                 .waitSeconds(0.3)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
