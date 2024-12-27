@@ -202,6 +202,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
     public void intake() { //gamepad1 a, right bumper, left bumper
         if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.3) {
+
             if (gamepad1.a && !isArmButtonDown && !isArmDown) {
                 isArmDown = true;
                 isArmButtonDown = true;
@@ -211,12 +212,16 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             else if (gamepad1.a && !isArmButtonDown && isArmDown) {
                 isArmDown = false;
                 isArmButtonDown = true;
+                intake.smallHingeTimer.reset();
             }
             else if (!gamepad1.a) {
                 isArmButtonDown = false;
             }
 
-
+            telemetry.addData("Time ", intake.smallHingeTimer.time());
+            telemetry.addData("Ran already ", intake.ranAlready);
+            telemetry.addData("Arm Down ", isArmDown);
+            telemetry.update();
             if (isArmDown) {
                 intake.intakePosition(wristMode);
                 if (gamepad1.right_bumper) {
@@ -238,13 +243,16 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                     intake.openClaw();
                     isClawClosed=!isClawClosed;
                 }*/
-            }
-            else {
+            } else {
+
                 intake.spinStop();
                 intake.restPosition();
                 intake.closeClaw();
             }
-        }
+
+
+
+       }
         else {
             isArmDown = false;
             isArmButtonDown = false;

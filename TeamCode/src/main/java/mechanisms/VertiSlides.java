@@ -85,10 +85,10 @@ public class VertiSlides {
     }
 
     public void update() {
-        telemetry.addData("SlideTop", slideTop.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("SlideMid", slideMid.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("SlideBot", slideBot.getCurrent(CurrentUnit.AMPS));
-        telemetry.update();
+//        telemetry.addData("SlideTop", slideTop.getCurrent(CurrentUnit.AMPS));
+//        telemetry.addData("SlideMid", slideMid.getCurrent(CurrentUnit.AMPS));
+//        telemetry.addData("SlideBot", slideBot.getCurrent(CurrentUnit.AMPS));
+//        telemetry.update();
 
         int tolerance = 0;
 
@@ -116,8 +116,8 @@ public class VertiSlides {
     }
 
     public void climbManualUp(){
-        telemetry.addData("climb encoder", climb.getCurrentPosition());
-        telemetry.update();
+//        telemetry.addData("climb encoder", climb.getCurrentPosition());
+//        telemetry.update();
         climb.setPower(1);
     }
 
@@ -194,10 +194,10 @@ public class VertiSlides {
         double error = climbTargetPos - currentPos;
         lastError = error;
         timer.reset();
-        telemetry.addData("Slide Position", getClimbCurrentPos());
-        telemetry.addData("climb target", climbTargetPos);
-        telemetry.addData("error: ", error);
-        telemetry.update();
+//        telemetry.addData("Slide Position", getClimbCurrentPos());
+//        telemetry.addData("climb target", climbTargetPos);
+//        telemetry.addData("error: ", error);
+//        telemetry.update();
         return ((error * kpu));
     }
 
@@ -208,10 +208,10 @@ public class VertiSlides {
         double derivative = (error - lastError)/ timer.seconds();
         lastError = error;
         timer.reset();
-        telemetry.addData("Slide Position", getCurrentPos());
-
-        telemetry.addData("error: ", error);
-        telemetry.update();
+//        telemetry.addData("Slide Position", getCurrentPos());
+//
+//        telemetry.addData("error: ", error);
+//        telemetry.update();
         return ((error * kpu) + (derivative * kd) + (integralSum * ki));
     }
 
@@ -222,9 +222,9 @@ public class VertiSlides {
         double derivative = (error - lastError)/ timer.seconds();
         lastError = error;
         timer.reset();
-        telemetry.addData("Slide Position", getCurrentPos());
-        telemetry.addData("error: ", error);
-        telemetry.update();
+//        telemetry.addData("Slide Position", getCurrentPos());
+//        telemetry.addData("error: ", error);
+//        telemetry.update();
         return ((error * kpd) + (derivative * kd) + (integralSum * ki));
     }
 

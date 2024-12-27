@@ -7,8 +7,8 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Config
@@ -38,9 +38,23 @@ public class Intake {
     private final double downPosition = 0.19;
     private final double restPosition = 0.6;
     private final double depositPosition = 0.95;
-    public static double frieren = 0.18;
+    public static double big_arm_intake = 0.08;
 
-    public static double temp = 0.10;
+    public static double small_arm_rest = 1;
+
+    public static double small_arm_intake = 0.55;
+
+    public static double big_arm_rest = .2;
+
+    public static double sigma = .61;
+
+    public boolean ranAlready = false;
+
+    public ElapsedTime smallHingeTimer;
+
+    private double time = 0;
+
+
 
     public Intake(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -95,22 +109,44 @@ public class Intake {
 
     public void setSmallHinge(double a) {
         smallHingeRight.setPosition(a);
-        smallHingeLeft.setPosition(a - (a == .5?.01:0));
+        smallHingeLeft.setPosition(a);
     }
     public void setBigHinge(double a) {
         bigHingeRight.setPosition(a);
-        bigHingeLeft.setPosition(a+.01);
+        bigHingeLeft.setPosition(a);
     }
+
+
 
     public void restPosition() {
-        setSmallHinge(temp);
-        setBigHinge(0.4);
+        setSmallHinge(small_arm_rest);
+        if(!ranAlready){
+            smallHingeTimer = new ElapsedTime();
+
+            smallHingeTimer.reset();
+
+            //smallHingeTimer.startTime();
+            ranAlready = true;
+        }
+
+        if(ranAlready){
+            time = smallHingeTimer.time();
+        }
+
         horiWrist();
+        if(time > .8) {
+            ranAlready = false;
+            setBigHinge(big_arm_rest);
+            time = 0;
+        }
+
     }
 
+
+
     public void intakePosition(boolean a) {
-        setSmallHinge(temp);
-        setBigHinge( frieren);
+        setSmallHinge(small_arm_intake);
+        setBigHinge(big_arm_intake);
         if (a) {
             horiWrist();
         } else {
@@ -129,7 +165,7 @@ public class Intake {
         horiWrist();
     }
     public void openClaw() {
-        claw.setPosition(0.2);
+        claw.setPosition(sigma);
     }
 
     public void closeClaw() {
