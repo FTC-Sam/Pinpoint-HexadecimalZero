@@ -1,12 +1,14 @@
 package mechanisms;
 
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+@Config
 public class Crane { //I got rid of hardwareMap variable and wanna try it as a disposable
     //constructor variable since it's only needed during initialization
     private Telemetry telemetry;
@@ -56,11 +58,13 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     private boolean topDownIntake = false;
     private boolean isIntakeToggleButtonDown = false;
 
+    public static double clawOpen = 0.76;
+
 
     public Crane(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
 
         this.telemetry = telemetry;
-        intake = new Intake(hardwareMap, this.telemetry);
+        intake = new Intake(hardwareMap, this.telemetry, true);
         horiSlides = new HoriSlides(hardwareMap, this.telemetry, true);
         vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
         this.gamepad1 = gamepad1;
@@ -208,7 +212,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             if (gamepad1.a && !isArmButtonDown && !isArmDown) {
                 isArmDown = true;
                 isArmButtonDown = true;
-                //intake.openClaw();
+                intake.openClaw();
                 intake.timer.reset();
                 isClawClosed=!isClawClosed;
             }
@@ -225,39 +229,86 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             telemetry.update();
             if (isArmDown) {
                 if (!topDownIntake) {
-                    intake.intakePosition(wristMode);
+                    intake.intakeSamplePosition(wristMode);
                 }
                 else {
-                    intake.intakeDownPosition(wristMode);
+                    intake.intakeSpecimenPosition(wristMode);
                 }
 
                 if (gamepad1.right_bumper) {
                     intake.openClaw();
                     intake.spinIn();
+                    telemetry.addLine("Claw open");
+                    telemetry.update();
                 }
                 else if (gamepad1.left_bumper) {
-                    intake.openClaw();
+                    intake.openClawBig();
                     intake.spinOut();
+                    telemetry.addLine("Claw open");
+                    telemetry.update();
+
+                }
+                else if (gamepad1.right_bumper && gamepad2.right_bumper) {
+                    intake.openClawBig();
+                    intake.spinIn();
+                    telemetry.addLine("Claw open");
+                    telemetry.update();
                 }
                 else {
                     intake.closeClaw();
                     intake.spinStop();
+                    telemetry.addLine("claw closed");
+                    telemetry.update();
+
+
                 }
-                /*if (gamepad1.right_bumper&&!americanGirl.right_bumper&&!isClawClosed) {
-                    intake.closeClaw();
-                    isClawClosed=!isClawClosed;
-                } else if (gamepad1.right_bumper&&!americanGirl.right_bumper&&isClawClosed) {
-                    intake.openClaw();
-                    isClawClosed=!isClawClosed;
-                }*/
 
             }
 
-            else {
 
+            if (gamepad1.x) {
+                intake.intakeSpecimenPosition(true);
+                if (gamepad1.right_bumper) {
+                    intake.setClawPosition(clawOpen);
+                    telemetry.addLine("Claw open");
+                    telemetry.update();
+                }
+                else if (gamepad1.left_bumper) {
+                    intake.setClawPosition(clawOpen);
+                    telemetry.addLine("Claw open");
+                    telemetry.update();
+
+                }
+                else {
+                    intake.closeClaw();
+                    intake.spinStop();
+                    telemetry.addLine("claw closed");
+                    telemetry.update();
+
+
+                }
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            else {
                 intake.spinStop();
                 intake.restPosition();
                 intake.closeClaw();
+                telemetry.addLine("claw closed");
+                telemetry.update();
             }
 
 
@@ -270,6 +321,8 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             isClawClosed=true;
             intake.restPosition();
 
+            telemetry.addLine("claw closed");
+            telemetry.update();
         }
     }
 

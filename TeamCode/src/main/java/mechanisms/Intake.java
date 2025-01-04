@@ -43,17 +43,18 @@ public class Intake {
 
     public static double small_arm_rest = 0.5;
 
-    public static double small_arm_intake = 0.69;
+    public static double small_arm_intake = 0.68;
 
     public static double big_arm_intake_down = 0.6;
 
-    public static double small_arm_intake_down = 0.4;
+    public static double small_arm_intake_down = 0.47;
 
 
     public static double big_arm_rest = .52;
 
-    public static double sigma = .68;
-    public static double antisigma = 0.5;
+    public static double open = .65;
+    public static double openBig = 0.7;
+    public static double close = 0.56;
 
     public boolean ranAlready = false;
 
@@ -108,8 +109,7 @@ public class Intake {
         spinLeft.setDirection(CRServoImplEx.Direction.REVERSE);
 
 
-        setBigHinge(0.1);
-        setSmallHinge(0.85);
+
         horiWrist();
 
         //closeClaw();
@@ -128,17 +128,17 @@ public class Intake {
 
 
     public void restPosition() {
-        for (int i = 0; i < 100; i++) setBigHinge(big_arm_rest);
-        if (timerRest.time() >4) setSmallHinge(small_arm_rest);
+        setBigHinge(big_arm_rest);
+        if (timerRest.time() >0.4) setSmallHinge(small_arm_rest);
 
 
     }
 
 
 
-    public void intakePosition(boolean a) {
+    public void intakeSamplePosition(boolean a) {
         setBigHinge(big_arm_intake);
-        if (timer.time() >0.4) setSmallHinge(small_arm_intake);
+        setSmallHinge(small_arm_intake);
         if (a) {
             horiWrist();
         } else {
@@ -146,9 +146,9 @@ public class Intake {
         }
     }
 
-    public void intakeDownPosition(boolean a) {
+    public void intakeSpecimenPosition(boolean a) {
         setBigHinge(big_arm_intake_down);
-        if (timer.time() >0.4) setSmallHinge(small_arm_intake_down);
+        setSmallHinge(small_arm_intake_down);
         if (a) {
             horiWrist();
         } else {
@@ -167,11 +167,19 @@ public class Intake {
         horiWrist();
     }
     public void openClaw() {
-        claw.setPosition(sigma);
+        claw.setPosition(open);
+    }
+    public void openClawBig() {
+        claw.setPosition(openBig);
+
+    }
+
+    public void setClawPosition(double a) {
+        claw.setPosition(a);
     }
 
     public void closeClaw() {
-        claw.setPosition(antisigma);
+        claw.setPosition(close);
     }
 
     public void horiWrist() {
