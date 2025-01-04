@@ -37,22 +37,31 @@ public class Intake {
 
     private final double downPosition = 0.19;
     private final double restPosition = 0.6;
-    private final double depositPosition = 0.95;
-    public static double big_arm_intake = 0.08;
+    public static double depositPositionBig = 0.9;
+    public static double depositPositionSmall = 0.8;
+    public static double big_arm_intake = 0.3;
 
-    public static double small_arm_rest = 1;
+    public static double small_arm_rest = 0.5;
 
-    public static double small_arm_intake = 0.55;
+    public static double small_arm_intake = 0.69;
 
-    public static double big_arm_rest = .2;
+    public static double big_arm_intake_down = 0.6;
 
-    public static double sigma = .61;
+    public static double small_arm_intake_down = 0.4;
+
+
+    public static double big_arm_rest = .52;
+
+    public static double sigma = .68;
+    public static double antisigma = 0.5;
 
     public boolean ranAlready = false;
 
-    public ElapsedTime smallHingeTimer;
-
     private double time = 0;
+
+    ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timerRest = new ElapsedTime();
+
 
 
 
@@ -103,7 +112,7 @@ public class Intake {
         setSmallHinge(0.85);
         horiWrist();
 
-        closeClaw();
+        //closeClaw();
 
     }
 
@@ -112,41 +121,34 @@ public class Intake {
         smallHingeLeft.setPosition(a);
     }
     public void setBigHinge(double a) {
-        bigHingeRight.setPosition(a);
+        bigHingeRight.setPosition(a-0.05);
         bigHingeLeft.setPosition(a);
     }
 
 
 
     public void restPosition() {
-        setSmallHinge(small_arm_rest);
-        if(!ranAlready){
-            smallHingeTimer = new ElapsedTime();
+        for (int i = 0; i < 100; i++) setBigHinge(big_arm_rest);
+        if (timerRest.time() >4) setSmallHinge(small_arm_rest);
 
-            smallHingeTimer.reset();
-
-            //smallHingeTimer.startTime();
-            ranAlready = true;
-        }
-
-        if(ranAlready){
-            time = smallHingeTimer.time();
-        }
-
-        horiWrist();
-        if(time > .8) {
-            ranAlready = false;
-            setBigHinge(big_arm_rest);
-            time = 0;
-        }
 
     }
 
 
 
     public void intakePosition(boolean a) {
-        setSmallHinge(small_arm_intake);
         setBigHinge(big_arm_intake);
+        if (timer.time() >0.4) setSmallHinge(small_arm_intake);
+        if (a) {
+            horiWrist();
+        } else {
+            vertiWrist();
+        }
+    }
+
+    public void intakeDownPosition(boolean a) {
+        setBigHinge(big_arm_intake_down);
+        if (timer.time() >0.4) setSmallHinge(small_arm_intake_down);
         if (a) {
             horiWrist();
         } else {
@@ -155,13 +157,13 @@ public class Intake {
     }
 
     public void samplePosition() {
-        setBigHinge(0.6);
-        setSmallHinge(0.6);
+        setBigHinge(depositPositionBig);
+        setSmallHinge(depositPositionSmall);
         horiWrist();
     }
     public void specimenPosition() {
-        setSmallHinge(0.7);
-        setBigHinge(0.6);
+        setSmallHinge(depositPositionBig);
+        setBigHinge(depositPositionSmall);
         horiWrist();
     }
     public void openClaw() {
@@ -169,7 +171,7 @@ public class Intake {
     }
 
     public void closeClaw() {
-        claw.setPosition(0.5);
+        claw.setPosition(antisigma);
     }
 
     public void horiWrist() {

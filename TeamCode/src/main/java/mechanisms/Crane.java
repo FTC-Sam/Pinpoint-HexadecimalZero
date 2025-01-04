@@ -1,9 +1,6 @@
 package mechanisms;
 
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -56,6 +53,8 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     private boolean isArmButtonDown = false;
     private boolean isWristButtonDown = false;
     private boolean wristMode = true;
+    private boolean topDownIntake = false;
+    private boolean isIntakeToggleButtonDown = false;
 
 
     public Crane(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
@@ -67,6 +66,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
         timer1.startTime();
+        horiSlides.in();
 
     }
 
@@ -78,6 +78,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         switch (currentState) {
             case GROUND:
                 setWristMode();
+                setIntakeMode();
                 intake(); //intake outtake, ensures retraction of box if slides retract
                 presetHoriSlides(); //slide auto
                 break;
@@ -142,6 +143,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             if (gamepad1.dpad_down) {
                 vertiSlides.setTargetPos(down);
                 currentState = CraneStates.GROUND;
+                intake.timerRest.reset();
             }
         }
     }
@@ -201,29 +203,34 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
     //ground mode related
 
     public void intake() { //gamepad1 a, right bumper, left bumper
-        if ((horiSlides.getPosition() <= horiThreshold) && timer2.seconds() > 0.3) {
+        if ((horiSlides.getPosition() >= horiThreshold) && timer2.seconds() > 0.3) {
 
             if (gamepad1.a && !isArmButtonDown && !isArmDown) {
                 isArmDown = true;
                 isArmButtonDown = true;
-                intake.openClaw();
+                //intake.openClaw();
+                intake.timer.reset();
                 isClawClosed=!isClawClosed;
             }
             else if (gamepad1.a && !isArmButtonDown && isArmDown) {
                 isArmDown = false;
                 isArmButtonDown = true;
-                intake.smallHingeTimer.reset();
             }
             else if (!gamepad1.a) {
                 isArmButtonDown = false;
             }
 
-            telemetry.addData("Time ", intake.smallHingeTimer.time());
             telemetry.addData("Ran already ", intake.ranAlready);
             telemetry.addData("Arm Down ", isArmDown);
             telemetry.update();
             if (isArmDown) {
-                intake.intakePosition(wristMode);
+                if (!topDownIntake) {
+                    intake.intakePosition(wristMode);
+                }
+                else {
+                    intake.intakeDownPosition(wristMode);
+                }
+
                 if (gamepad1.right_bumper) {
                     intake.openClaw();
                     intake.spinIn();
@@ -243,7 +250,10 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                     intake.openClaw();
                     isClawClosed=!isClawClosed;
                 }*/
-            } else {
+
+            }
+
+            else {
 
                 intake.spinStop();
                 intake.restPosition();
@@ -274,6 +284,20 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
         }
         else if (!gamepad1.x) {
             isWristButtonDown = false;
+        }
+    }
+
+    public void setIntakeMode() {
+        if (gamepad2.x && !isIntakeToggleButtonDown && !topDownIntake) {
+            topDownIntake = true;
+            isIntakeToggleButtonDown = true;
+        }
+        else if (gamepad2.x && !isIntakeToggleButtonDown && topDownIntake) {
+            topDownIntake = false;
+            isIntakeToggleButtonDown = true;
+        }
+        else if (!gamepad2.x) {
+            isIntakeToggleButtonDown = false;
         }
     }
 
