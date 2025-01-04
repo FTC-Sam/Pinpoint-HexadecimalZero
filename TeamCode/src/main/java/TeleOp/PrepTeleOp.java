@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
+import mechanisms.Crane;
 import mechanisms.Drivetrain;
 import mechanisms.HoriSlides;
 import mechanisms.VertiSlides;
@@ -54,6 +55,7 @@ public class PrepTeleOp extends LinearOpMode {
     public static double rightWristMax = 0.1;
     public ServoImplEx wrist;
     public ServoImplEx claw;
+    public Crane crane;
 
 
 
@@ -72,13 +74,15 @@ public class PrepTeleOp extends LinearOpMode {
         wrist = (ServoImplEx) hardwareMap.servo.get("wrist");
         claw = (ServoImplEx) hardwareMap.servo.get("claw");
 
+        crane = new Crane(hardwareMap, telemetry, gamepad1, gamepad2);
+
         climb = (DcMotorEx) hardwareMap.dcMotor.get("climb");
         horiSlides = new HoriSlides(hardwareMap, telemetry);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         vertiSlides = new VertiSlides(hardwareMap, telemetry);
-        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1);
+        drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1, crane);
     }
 
 

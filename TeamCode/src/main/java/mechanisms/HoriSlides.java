@@ -17,8 +17,8 @@ public class HoriSlides {
     private ServoImplEx servoRight;
     private Telemetry telemetry;
 
-    public static double out = 0.37;
-    public static double in = 0.65;
+    public static double in = 0.4;
+    public static double out = 0.72;
 
     //public boolean in = true;
 
@@ -33,6 +33,8 @@ public class HoriSlides {
         servoRight = (ServoImplEx) hardwareMap.servo.get("servoRight");
         servoRight.setDirection(Servo.Direction.REVERSE);
         this.telemetry = telemetry;
+
+
     }
 
 
@@ -48,7 +50,7 @@ public class HoriSlides {
     }
 
     public boolean isReset() {
-        return servoLeft.getPosition() > 0.6;
+        return servoLeft.getPosition() < 0.55;
     }
 
     public double getPosition() {
