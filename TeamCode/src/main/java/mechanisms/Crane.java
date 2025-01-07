@@ -147,7 +147,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
             if (gamepad1.dpad_down) {
                 vertiSlides.setTargetPos(down);
                 currentState = CraneStates.GROUND;
-                intake.timerRest.reset();
+                //intake.timerRest.reset();
             }
         }
     }
@@ -213,7 +213,7 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                 isArmDown = true;
                 isArmButtonDown = true;
                 intake.openClaw();
-                intake.timer.reset();
+              //  intake.timer.reset();
                 isClawClosed=!isClawClosed;
             }
             else if (gamepad1.a && !isArmButtonDown && isArmDown) {
@@ -224,15 +224,15 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                 isArmButtonDown = false;
             }
 
-            telemetry.addData("Ran already ", intake.ranAlready);
+           // telemetry.addData("Ran already ", intake.ranAlready);
             telemetry.addData("Arm Down ", isArmDown);
             telemetry.update();
             if (isArmDown) {
                 if (!topDownIntake) {
-                    intake.intakeSamplePosition(wristMode);
+               //     intake.intakeSamplePosition(wristMode);
                 }
                 else {
-                    intake.intakeSpecimenPosition(wristMode);
+                  //  intake.intakeSpecimenPosition(wristMode);
                 }
 
                 if (gamepad1.right_bumper) {
@@ -242,14 +242,14 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
                     telemetry.update();
                 }
                 else if (gamepad1.left_bumper) {
-                    intake.openClawBig();
+                  //  intake.openClawBig();
                     intake.spinOut();
                     telemetry.addLine("Claw open");
                     telemetry.update();
 
                 }
                 else if (gamepad1.right_bumper && gamepad2.right_bumper) {
-                    intake.openClawBig();
+                //    intake.openClawBig();
                     intake.spinIn();
                     telemetry.addLine("Claw open");
                     telemetry.update();
@@ -267,14 +267,14 @@ public class Crane { //I got rid of hardwareMap variable and wanna try it as a d
 
 
             if (gamepad1.x) {
-                intake.intakeSpecimenPosition(true);
+              //  intake.intakeSpecimenPosition(true);
                 if (gamepad1.right_bumper) {
-                    intake.setClawPosition(clawOpen);
+              //      intake.setClawPosition(clawOpen);
                     telemetry.addLine("Claw open");
                     telemetry.update();
                 }
                 else if (gamepad1.left_bumper) {
-                    intake.setClawPosition(clawOpen);
+               //     intake.setClawPosition(clawOpen);
                     telemetry.addLine("Claw open");
                     telemetry.update();
 
