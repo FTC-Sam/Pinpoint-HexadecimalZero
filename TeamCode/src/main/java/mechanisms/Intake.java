@@ -23,7 +23,7 @@ public class Intake {
     public ServoImplEx claw;
     public CRServoImplEx spinRight;
     public CRServoImplEx spinLeft;
-    public enum AutoActionModes {
+    private enum AutoActionModes {
         OPENCLAW,
         CLOSECLAW,
         INTAKE,

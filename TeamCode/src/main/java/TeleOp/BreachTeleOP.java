@@ -1,6 +1,10 @@
 package TeleOp;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,6 +13,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+
+import mechanisms.Intake;
+
 @TeleOp(name = "TeleV2")
 @Config
 public class BreachTeleOP extends LinearOpMode {
@@ -450,9 +457,6 @@ public class BreachTeleOP extends LinearOpMode {
         largeHingeServoRight.setPosition(lowLargeHingeSpecimenScore);
         isDepositing=false;
     }
-    public void closeClaw() {
-
-    }
 
     public void specimenDeposit() {
         if (clawClosed) {
@@ -533,6 +537,134 @@ public class BreachTeleOP extends LinearOpMode {
         while (System.currentTimeMillis() < endTime && opModeIsActive()) {
             idle(); // Yield control to allow other operations
         }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public enum AutoActionModes {
+        SETSLIDE,
+        DEPOSITPOS,
+        DEPOSITHIGH,
+        DEPOSITLOW,
+        OPENCLAW,
+        CLOSECLAW,
+        RUNINTAKE,
+        STOPINTAKE,
+        REST,
+        SAMPLEINTAKEPOS,
+        SPECIMENINTAKEPOS,
+        SPECIALDEPOSITPOS,
+        SPECIALDEPOSIT,
+        HUMANDROP
+    }
+
+
+
+    public class AutoActions implements Action {
+        private final AutoActionModes action;
+        private double slidePos = 0;
+        public AutoActions(AutoActionModes action) {
+            this.action = action;
+        }
+        public AutoActions(AutoActionModes action, double slidePos) {
+            this.action = action;
+            this.slidePos = slidePos;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            switch (action) {
+                case OPENCLAW:
+                    clawServo.setPosition(specimenClawOpen);
+                    break;
+                case CLOSECLAW:
+                    clawServo.setPosition(clawCloseSpecimen);
+                    break;
+                case SETSLIDE:
+                    slideServoLeft.setPosition(slidePos);
+                    slideServoRight.setPosition(slidePos);
+                    break;
+                case DEPOSITPOS:
+                    moveLargeHinge(largeHingeSpecimenDeposit);
+                    moveHorizontalSlides(servoSlidesRetract);
+                    moveLargeHinge(largeHingeSpecimenDeposit);
+                    moveSmallHinge(SmallHingeSpecimenDeposit);
+                    wristServo.setPosition(.772);
+                    break;
+                case DEPOSITHIGH:
+                    largeHingeServoLeft.setPosition(largeHingeSpecimenScore);
+                    largeHingeServoRight.setPosition(largeHingeSpecimenScore);
+                    moveSmallHinge(highSmallHingeSampleDeposit);
+                    break;
+                case DEPOSITLOW:
+                    moveSmallHinge(lowSmallSpecimenScore);
+                    largeHingeServoLeft.setPosition(lowLargeHingeSpecimenScore);
+                    largeHingeServoRight.setPosition(lowLargeHingeSpecimenScore);
+                    break;
+                case REST:
+                    moveLargeHinge(.5);
+                    moveSmallHinge(.5);
+                    wristServo.setPosition(.05);
+                    moveHorizontalSlides(servoSlidesRetract);
+                    break;
+                case RUNINTAKE:
+                    intakeServoLeft.setPower(-intakeWheelSpeed);
+                    intakeServoRight.setPower(intakeWheelSpeed);
+                    clawServo.setPosition(sampleClawOpen);
+                    break;
+                case STOPINTAKE:
+                    intakeServoLeft.setPower(0);
+                    intakeServoRight.setPower(0);
+                    clawServo.setPosition(clawCloseSample);
+                    break;
+                case SAMPLEINTAKEPOS:
+                    moveSmallHinge(smallHingeSampleIntake);
+                    moveLargeHinge(largeHingeSampleIntake);
+                    wristServo.setPosition(.05);
+                    break;
+                case SPECIMENINTAKEPOS:
+                    moveSmallHinge(smallHingeSpecimenIntake);
+                    moveLargeHinge(largeHingeSpecimenIntake);
+                    wristServo.setPosition(.05);
+                    break;
+                case SPECIALDEPOSITPOS:
+                    moveSmallHinge(0);
+                    moveLargeHinge(0);
+                    wristServo.setPosition(.05);
+                    break;
+                case SPECIALDEPOSIT:
+                    moveSmallHinge(1);
+                    moveLargeHinge(0);
+                    wristServo.setPosition(.05);
+                    break;
+                case HUMANDROP:
+                    moveSmallHinge(0.5);
+                    moveLargeHinge(0);
+                    wristServo.setPosition(.05);
+                    break;
+            }
+            return false;
+        }
+    }
+    public Action runAutoAction(AutoActionModes action) {
+        return new AutoActions(action);
+    }
+    public Action runAutoAction(AutoActionModes action, double a) {
+        return new AutoActions(action, a);
     }
 }
 

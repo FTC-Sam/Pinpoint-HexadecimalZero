@@ -40,7 +40,7 @@ public class BarBucketAuto extends LinearOpMode {
 
     private void buildTrajectories() {
         TrajectoryActionBuilder trajectoryHolder = drive.actionBuilder(initialPose)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.REST))
+                /*.afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.REST))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(breach))
                 .waitSeconds(1)
@@ -146,13 +146,13 @@ public class BarBucketAuto extends LinearOpMode {
                 .waitSeconds(2)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.ARMUP))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(0))
-                .afterTime(1, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
+                .afterTime(1, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))*/
 
 
 
 
 
-                .strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(270));*/
+                .strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(270));
 
 
 
