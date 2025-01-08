@@ -104,12 +104,12 @@ public class PrepTeleOp extends LinearOpMode {
             if (gamepad1.y) hinge.setPosition(servoDown); //0.559 intake
             //0.431 rest
             */
-            /*if (gamepad1.dpad_up) {
+            if (gamepad1.dpad_up) {
                 smallHingeRight.setPosition(servoIn);
                 smallHingeLeft.setPosition(servoIn);
                 bigHingeRight.setPosition(servoOut);
                 bigHingeLeft.setPosition(servoOut);
-            }
+            }/*
             if (gamepad1.dpad_down) {
                 horiSlides.in();
             }
@@ -142,14 +142,7 @@ public class PrepTeleOp extends LinearOpMode {
             vertiSlides.update();
             telemetry.update();
             drivetrain.drive();*/
-            if(gamepad1.a) {
-                climb.setPower(-1);
-            }else if (gamepad1.b) {
-                climb.setPower(1);
-            }
-            else {
-                climb.setPower(0);
-            }
+
 
         }
 
