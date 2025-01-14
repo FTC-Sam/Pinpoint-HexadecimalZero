@@ -12,7 +12,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.PinpointDrive;
+import org.opencv.features2d.BRISK;
 
+import TeleOp.BreachTeleOP;
+import mechanisms.Bot;
 import mechanisms.HoriSlides;
 import mechanisms.Intake;
 import mechanisms.VertiSlides;
@@ -23,117 +26,175 @@ public class SpecimenAutoButBetter extends LinearOpMode {
     private PinpointDrive drive;
     private Pose2d initialPose;
     private Action trajectory;
-    private Intake intake;
-    private HoriSlides horiSlides;
-    private VertiSlides vertiSlides;
+    private Bot mechanisms;
 
     private void Initialize() {
         initialPose = new Pose2d(9, -61, Math.toRadians(90));
         drive = new PinpointDrive(hardwareMap, initialPose);
-        intake = new Intake(hardwareMap, this.telemetry, true);
-        horiSlides = new HoriSlides(hardwareMap, this.telemetry, true);
-        vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
+        mechanisms = new Bot(hardwareMap);
     }
 
     private void BuildTrajectories() {
         TrajectoryActionBuilder trajectoryHolder = drive.actionBuilder(initialPose)
 
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
-                .afterTime(0.2, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .afterTime(0.2, horiSlides.runHoriSlidesAuto(0.35))
-                .afterTime(0.5, vertiSlides.runVertiSlidesAuto(500))
-                .waitSeconds(.5)
+                //preload
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.REST))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.STOPINTAKE))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.CLOSECLAW))
+                .afterTime(0.1, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITPOS))
+                .waitSeconds(0.5)
+                .strafeToLinearHeading(new Vector2d(9, -45), Math.toRadians(90))
+                .afterTime(0.2, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITLOW))
+                .afterTime(1, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
+                .waitSeconds(1)
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.CLOSECLAW))
+                .afterTime(0.3, mechanisms.runAutoAction(Bot.AutoActionModes.REST))
 
-                .strafeToLinearHeading(new Vector2d(9, -43.4), Math.toRadians(90))
-                .waitSeconds(.6)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(300))
-                .afterTime(0.2, horiSlides.runHoriSlidesAuto(0.45))
-                .waitSeconds(0.8)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .waitSeconds(0.3)
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
+
+
+
+
+
+                //deposit samples
+                .setReversed(true)
+                .splineTo(new Vector2d(15, -45), Math.toRadians(0))
+                .splineTo(new Vector2d(35, -35), Math.toRadians(30))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.45))
+                .afterTime(0.3, mechanisms.runAutoAction(Bot.AutoActionModes.RUNINTAKE))
+                .afterTime(0.3, mechanisms.runAutoAction(Bot.AutoActionModes.SAMPLEINTAKEPOS))
+                .afterTime(1, mechanisms.runAutoAction(Bot.AutoActionModes.STOPINTAKE))
+                .waitSeconds(1)
+
+                .turnTo(Math.toRadians(135))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.EXTAKE))
+                .waitSeconds(0.4)
+
+
+
+                .setReversed(false)
+
+                .turnTo(Math.toRadians(205))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.35))
+                .afterTime(0.3, mechanisms.runAutoAction(Bot.AutoActionModes.RUNINTAKE))
+                .afterTime(0.3, mechanisms.runAutoAction(Bot.AutoActionModes.SAMPLEINTAKEPOS))
+                .afterTime(1, mechanisms.runAutoAction(Bot.AutoActionModes.STOPINTAKE))
+                .waitSeconds(1)
+
+
+                .turnTo(Math.toRadians(135))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.EXTAKE))
+                .waitSeconds(0.4)
+
+                .turnTo(Math.toRadians(195))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.25))
+                .afterTime(0.3, mechanisms.runAutoAction(Bot.AutoActionModes.RUNINTAKE))
+                .afterTime(0.3, mechanisms.runAutoAction(Bot.AutoActionModes.SAMPLEINTAKEPOS))
+                .afterTime(1, mechanisms.runAutoAction(Bot.AutoActionModes.STOPINTAKE))
+                .waitSeconds(1)
+
+
+                .turnTo(Math.toRadians(135))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.EXTAKE))
+                .waitSeconds(0.4)
+
+
+
+
+
+                //first specimen
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.65))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.STOPINTAKE))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SPECIMENINTAKEPOS))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
+                .strafeToLinearHeading(new Vector2d(47, -43), Math.toRadians(90))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.25))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.CLOSECLAW))
+                .waitSeconds(1)
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITPOS))
                 .strafeToLinearHeading(new Vector2d(9, -43), Math.toRadians(90))
-
-
-                .afterTime(0.1, vertiSlides.runVertiSlidesAuto(0))
-                .afterTime(0.1, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .afterTime(0.1, intake.runBoxAuto(Intake.AutoActionModes.REST))
-
-
-
-
-                .strafeToLinearHeading(new Vector2d(9, -46), Math.toRadians(90))
-
-                .strafeToLinearHeading(new Vector2d(27, -38), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(44, -10, Math.toRadians(90)),Math.toRadians(50))
-
-
-                .strafeToLinearHeading(new Vector2d(48, -45), Math.toRadians(90))
-
-                .strafeToLinearHeading(new Vector2d(56, -4), Math.toRadians(90))
-
-
-
-                .strafeToLinearHeading(new Vector2d(61, -45), Math.toRadians(90))
-                .strafeToLinearHeading(new Vector2d(52, -42.2), Math.toRadians(90))
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKE))
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
+                .splineToLinearHeading(new Pose2d(-9, -40, Math.toRadians(90)), Math.toRadians(90))
+                .afterTime(0.2, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITLOW))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
                 .waitSeconds(1)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .waitSeconds(.3)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.RESTLOL))
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
-                .afterTime(0.3, vertiSlides.runVertiSlidesAuto(500))
-                .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
-                .strafeToLinearHeading(new Vector2d(6, -37.7), Math.toRadians(90), new TranslationalVelConstraint(50), new ProfileAccelConstraint(-30, 50))
-
-                .waitSeconds(.6)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(300))
-                .afterTime(0.2, horiSlides.runHoriSlidesAuto(0.4))
-                .waitSeconds(0.8)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .waitSeconds(0.3)
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
-                .strafeToLinearHeading(new Vector2d(6, -41), Math.toRadians(90))
-
-
-                .afterTime(0.1, vertiSlides.runVertiSlidesAuto(0))
-                .afterTime(0.1, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .afterTime(0.1, intake.runBoxAuto(Intake.AutoActionModes.REST))
 
 
 
 
-                .strafeToLinearHeading(new Vector2d(30, -41), Math.toRadians(135))
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.INTAKE))
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .afterTime(0, horiSlides.runHoriSlidesAuto(0.7))
+
+
+
+                //second specimen
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SPECIMENINTAKEPOS))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(9, -43, Math.toRadians(90)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(47, -43), Math.toRadians(90))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.25))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.CLOSECLAW))
                 .waitSeconds(1)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .waitSeconds(.3)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.RESTLOL))
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
-                .afterTime(0.3, vertiSlides.runVertiSlidesAuto(500))
-                .afterTime(0.3, intake.runBoxAuto(Intake.AutoActionModes.FLIPWRISTDEPOSIT))
-                .strafeToLinearHeading(new Vector2d(0, -37.3), Math.toRadians(90), new TranslationalVelConstraint(50), new ProfileAccelConstraint(-30, 50))
-
-                .waitSeconds(.6)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(300))
-                .afterTime(0.2, horiSlides.runHoriSlidesAuto(0.4))
-                .waitSeconds(0.8)
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.OPENCLAW))
-                .waitSeconds(0.3)
-                .afterTime(0.3, horiSlides.runHoriSlidesAuto(0.35))
-                .strafeToLinearHeading(new Vector2d(4, -42.7), Math.toRadians(90))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITPOS))
+                .setReversed(false)
+                .strafeToLinearHeading(new Vector2d(15, -43), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-3, -40, Math.toRadians(90)), Math.toRadians(90))
+                .afterTime(0.2, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITLOW))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
+                .waitSeconds(1)
 
 
-                .afterTime(0.1, vertiSlides.runVertiSlidesAuto(0))
-                .afterTime(0.1, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .afterTime(0.1, intake.runBoxAuto(Intake.AutoActionModes.REST));
+
+
+
+
+
+                //third specimen
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SPECIMENINTAKEPOS))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(9, -43, Math.toRadians(90)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(47, -43), Math.toRadians(90))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.25))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.CLOSECLAW))
+                .waitSeconds(1)
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITPOS))
+                .setReversed(false)
+                .strafeToLinearHeading(new Vector2d(21, -43), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(3, -40, Math.toRadians(90)), Math.toRadians(90))
+                .afterTime(0.2, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITLOW))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
+                .waitSeconds(1)
+
+
+
+
+
+
+
+
+
+
+                //fourth specimen
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SPECIMENINTAKEPOS))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(9, -43, Math.toRadians(90)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(47, -43), Math.toRadians(90))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.25))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.CLOSECLAW))
+                .waitSeconds(1)
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITPOS))
+                .setReversed(false)
+                .strafeToLinearHeading(new Vector2d(27, -43), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(9, -40, Math.toRadians(90)), Math.toRadians(90))
+                .afterTime(0.2, mechanisms.runAutoAction(Bot.AutoActionModes.DEPOSITLOW))
+                .afterTime(0.5, mechanisms.runAutoAction(Bot.AutoActionModes.OPENCLAW))
+                .waitSeconds(1)
+
+
+                //park
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SETSLIDE, 0.25))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.CLOSECLAW))
+                .afterTime(0, mechanisms.runAutoAction(Bot.AutoActionModes.SAMPLEINTAKEPOS))
+                .strafeToSplineHeading(new Vector2d(30, -50), Math.toRadians(125));
 
 
 
@@ -158,8 +219,7 @@ public class SpecimenAutoButBetter extends LinearOpMode {
 
         Actions.runBlocking(
                 new ParallelAction(
-                        trajectory,
-                        vertiSlides.updateVertiSlidesAuto()
+                        trajectory
                 )
         );
     }

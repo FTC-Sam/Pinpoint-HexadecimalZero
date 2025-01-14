@@ -8,6 +8,8 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import java.util.Vector;
+
 public class FarAuto {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
@@ -17,71 +19,76 @@ public class FarAuto {
                 .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(33, -61, Math.toRadians(90)))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(9, -61, Math.toRadians(90)))
 
-                .waitSeconds(.5)
 
-                .strafeToLinearHeading(new Vector2d(9, -43.95), Math.toRadians(90))
-                .waitSeconds(0.4)
+                //preload
+                .waitSeconds(0.5)
+                .strafeToLinearHeading(new Vector2d(9, -40), Math.toRadians(90))
+                .waitSeconds(1)
 
-                .waitSeconds(0.3)
+                .setReversed(true)
+                .splineTo(new Vector2d(15, -45), Math.toRadians(0))
+                .splineTo(new Vector2d(35, -35), Math.toRadians(30))
 
-                .waitSeconds(0)
+                .turnTo(Math.toRadians(135))
 
+                .setReversed(false)
+
+                .turnTo(Math.toRadians(205))
+                .turnTo(Math.toRadians(135))
+
+                .turnTo(Math.toRadians(195))
+                .turnTo(Math.toRadians(135))
+
+
+
+
+
+
+
+
+
+
+
+
+                //first specimen
+                .strafeToLinearHeading(new Vector2d(47, -43), Math.toRadians(90))
+                .waitSeconds(1)
                 .strafeToLinearHeading(new Vector2d(9, -43), Math.toRadians(90))
-
-
-
-
-                .strafeToLinearHeading(new Vector2d(9, -46), Math.toRadians(90))
-
-                .strafeToLinearHeading(new Vector2d(27, -38), Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(44, -10, Math.toRadians(90)),Math.toRadians(50))
-
-
-                .strafeToLinearHeading(new Vector2d(48, -45), Math.toRadians(90))
-
-                .strafeToLinearHeading(new Vector2d(56, -4), Math.toRadians(90))
-
-
-
-                .strafeToLinearHeading(new Vector2d(61, -45), Math.toRadians(90))
-                .strafeToLinearHeading(new Vector2d(49.5, -43.7), Math.toRadians(90))  //GRAB POS
-
-                .waitSeconds(.6)
-
-
-                .strafeToLinearHeading(new Vector2d(2, -37.75), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40)) // DESPOSIT POS
-
-                .waitSeconds(0.4)
-
-                .waitSeconds(0.3)
-
-                .waitSeconds(0)
-
-                .strafeToLinearHeading(new Vector2d(6, -43), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-9, -33, Math.toRadians(90)), Math.toRadians(90))
+                .waitSeconds(1)
 
 
 
 
 
-                //second cycle
-                .strafeToLinearHeading(new Vector2d(46, -42.5), Math.toRadians(93))
 
-                .waitSeconds(.6)
+                //second specimen
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(9, -43, Math.toRadians(90)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(47, -43), Math.toRadians(90))
+                .waitSeconds(1)
+                .setReversed(false)
+                .strafeToLinearHeading(new Vector2d(15, -43), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-3, -33, Math.toRadians(90)), Math.toRadians(90))
+                .waitSeconds(1)
 
-                .waitSeconds(.2)
 
-                .strafeToLinearHeading(new Vector2d(-3, -37.75), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
 
-                .waitSeconds(0)
 
-                //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
-                .waitSeconds(0.3)
 
-                .waitSeconds(0)
 
-                .strafeToLinearHeading(new Vector2d(6, -42.7), Math.toRadians(90))
+
+                //third specimen
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(9, -43, Math.toRadians(90)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(47, -43), Math.toRadians(90))
+                .waitSeconds(1)
+                .setReversed(false)
+                .strafeToLinearHeading(new Vector2d(21, -43), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(3, -33, Math.toRadians(90)), Math.toRadians(90))
+                .waitSeconds(1)
 
 
 
@@ -92,26 +99,33 @@ public class FarAuto {
 
 
 
+                //fourth specimen
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(9, -43, Math.toRadians(90)), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(47, -43), Math.toRadians(90))
+                .waitSeconds(1)
+                .setReversed(false)
+                .strafeToLinearHeading(new Vector2d(27, -43), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(9, -33, Math.toRadians(90)), Math.toRadians(90))
+                .waitSeconds(1)
+
+
+                //park
+                .strafeToSplineHeading(new Vector2d(30, -50), Math.toRadians(125))
 
 
 
 
-                //Third cycle
-                .strafeToLinearHeading(new Vector2d(46, -42.5), Math.toRadians(93)) //supposed to be y=-41
 
-                .waitSeconds(.6)
 
-                .waitSeconds(.2)
 
-                .strafeToLinearHeading(new Vector2d(-7, -38.55), Math.toRadians(90), new TranslationalVelConstraint(40), new ProfileAccelConstraint(-20, 40))
 
-                .waitSeconds(0.4)
 
-                .waitSeconds(0.3)
 
-                .waitSeconds(0)
 
-                .strafeToLinearHeading(new Vector2d(47.5, -55.2), Math.toRadians(200),  new TranslationalVelConstraint(150), new ProfileAccelConstraint(-150, 150))
+
+
+
 
                 .build());
 

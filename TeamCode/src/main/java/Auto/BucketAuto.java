@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.PinpointDrive;
@@ -17,6 +18,7 @@ import mechanisms.HoriSlides;
 import mechanisms.VertiSlides;
 
 
+@Disabled
 @Config
 @Autonomous(name = "BucketAuto")
 public class BucketAuto extends LinearOpMode {
@@ -39,8 +41,7 @@ public class BucketAuto extends LinearOpMode {
 
     private void buildTrajectories() {
         TrajectoryActionBuilder trajectoryHolder = drive.actionBuilder(initialPose)
-                .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.in))
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
+                /*.afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(4700))
                 .strafeToLinearHeading(new Vector2d(-33, -56), Math.toRadians(180))
@@ -143,13 +144,13 @@ public class BucketAuto extends LinearOpMode {
                 .waitSeconds(2)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.ARMUP))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(0))
-                .afterTime(1, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
+                .afterTime(1, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))*/
 
 
 
 
 
-                .strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(270));*/
+                .strafeToLinearHeading(new Vector2d(-45, -45), Math.toRadians(270));
 
 
 
