@@ -64,7 +64,9 @@ public class VertiSlides {
 
 
 
-        slideMid.setDirection(DcMotorSimple.Direction.REVERSE); // leave this be
+        slideTop.setDirection(DcMotorSimple.Direction.REVERSE);
+        slideBot.setDirection(DcMotorSimple.Direction.REVERSE);// leave this be, nuh uh
+
 
 
         this.telemetry = telemetry;
@@ -187,6 +189,10 @@ public class VertiSlides {
 
     public int getTargetPos() {
         return targetPos;
+    }
+
+    public int getError(){
+        return getTargetPos() - getCurrentPos();
     }
 
     private double returnClimbPower(){
