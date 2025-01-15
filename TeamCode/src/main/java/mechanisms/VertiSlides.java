@@ -16,9 +16,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 @Config
 public class VertiSlides {
-    private DcMotorEx slideTop;
-    private DcMotorEx slideMid;
-    private DcMotorEx slideBot;
+    public DcMotorEx slideTop;
+    public DcMotorEx slideMid;
+    public DcMotorEx slideBot;
     private DcMotorEx climb;
 
     private int targetPos;
@@ -33,11 +33,14 @@ public class VertiSlides {
     private double lastError = 0;
     private Telemetry telemetry;
 
-    public static double kpu = 0.005;
-    public static double kpd = 0.0003;
+    public static double kpu = 0.008;
+    public static double kpd = 0.0015;
 
     public static double ki = 0.0000000000;
     public static double kd = 0.000000;
+
+    public boolean shouldBrake = false;
+
 
     public VertiSlides(HardwareMap hardwareMap, Telemetry telemetry) {
         slideTop = (DcMotorEx) hardwareMap.dcMotor.get("slideTop");
@@ -113,8 +116,9 @@ public class VertiSlides {
             slideTop.setPower(0);
             slideMid.setPower(0);
             slideBot.setPower(0);
-
         }
+
+
     }
 
     public void climbManualUp(){

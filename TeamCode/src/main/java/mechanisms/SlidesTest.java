@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 
 @TeleOp
 @Config
@@ -51,6 +53,9 @@ public class SlidesTest extends LinearOpMode {
             presetVertiSlides();
             vertiSlides.update();
             telemetry.addData("error ", vertiSlides.getError());
+            telemetry.addData("top motor current draw", vertiSlides.slideTop.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("middle motor current draw", vertiSlides.slideMid.getCurrent(CurrentUnit.AMPS));
+            telemetry.addData("bottom motor current draw", vertiSlides.slideBot.getCurrent(CurrentUnit.AMPS));
             telemetry.update();
         }
     }
