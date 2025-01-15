@@ -1,3 +1,4 @@
+/*
 package Auto;
 
 import com.acmerobotics.roadrunner.Action;
@@ -10,9 +11,12 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.PinpointDrive;
 
+import mechanisms.Caroline;
 import mechanisms.HoriSlides;
 import mechanisms.Intake;
 import mechanisms.VertiSlides;
@@ -23,29 +27,23 @@ public class SpecimanAuto extends LinearOpMode {
     private PinpointDrive drive;
     private Pose2d initialPose;
     private Action trajectory;
-    private Intake intake;
-    private HoriSlides horiSlides;
-    private VertiSlides vertiSlides;
-
+    private Caroline caroline;
     private void Initialize() {
         initialPose = new Pose2d(9, -60.85, Math.toRadians(90));
         drive = new PinpointDrive(hardwareMap, initialPose);
-        intake = new Intake(hardwareMap, this.telemetry, true);
-        horiSlides = new HoriSlides(hardwareMap, this.telemetry, true);
-        vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
+        caroline=new Caroline(hardwareMap);
+        caroline.OpeningMove();
     }
 
     private void BuildTrajectories() {
         TrajectoryActionBuilder trajectoryHolder = drive.actionBuilder(initialPose)
 
-                /*.afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSIT))
-                .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
-                .afterTime(0, horiSlides.runHoriSlidesAuto(HoriSlides.in))
-                .afterTime(0, vertiSlides.runVertiSlidesAuto(1742))
-                .waitSeconds(.5)
+
+
 
                 .strafeToLinearHeading(new Vector2d(9, -43.45), Math.toRadians(90))
-                .waitSeconds(0.4)
+                .afterTime(50, caroline.specimenDepositAuto());
+                //.waitSeconds(0.4)
                 .afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.DEPOSITDEPOSIT))
                 .afterTime(0, vertiSlides.runVertiSlidesAuto(300))
                 //.afterTime(0.3, horiSlides.runHoriSlidesAuto(0.55))
@@ -177,7 +175,7 @@ public class SpecimanAuto extends LinearOpMode {
                 .afterTime(0.2, vertiSlides.runVertiSlidesAuto(0))
                 .afterTime(0.3, horiSlides.runHoriSlidesAuto(HoriSlides.in))
                 .strafeToLinearHeading(new Vector2d(47.5, -55.2), Math.toRadians(200),  new TranslationalVelConstraint(150), new ProfileAccelConstraint(-150, 150))*/
-                .afterTime(0, horiSlides.runHoriSlidesAuto(0.5));
+               // .afterTime(0, horiSlides.runHoriSlidesAuto(0.5));
 
 
                 //.afterTime(0, intake.runBoxAuto(Intake.AutoActionModes.CLOSECLAW))
@@ -188,28 +186,3 @@ public class SpecimanAuto extends LinearOpMode {
 
 
 
-
-        trajectory = trajectoryHolder.build();
-    }
-
-    @Override
-    public void runOpMode() throws InterruptedException {
-        Initialize();
-        BuildTrajectories();
-
-
-
-
-
-
-
-        waitForStart();
-
-        Actions.runBlocking(
-                new ParallelAction(
-                        trajectory,
-                        vertiSlides.updateVertiSlidesAuto()
-                )
-        );
-    }
-}

@@ -1,5 +1,5 @@
 package Auto;
-
+/*
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.PinpointDrive;
 import org.opencv.features2d.BRISK;
 
 import TeleOp.BreachTeleOP;
-import mechanisms.Bot;
+//import mechanisms.Bot;
 import mechanisms.HoriSlides;
 import mechanisms.Intake;
 import mechanisms.VertiSlides;
@@ -224,3 +224,4 @@ public class SpecimenAutoButBetter extends LinearOpMode {
         );
     }
 }
+*/

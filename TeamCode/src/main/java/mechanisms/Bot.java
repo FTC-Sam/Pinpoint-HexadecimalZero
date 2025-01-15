@@ -1,6 +1,6 @@
 package mechanisms;
-
-import static TeleOp.BreachTeleOP.SmallHingeSpecimenDeposit;
+/*
+//import static TeleOp.BreachTeleOP.SmallHingeSpecimenDeposit;
 import static TeleOp.BreachTeleOP.clawCloseSample;
 import static TeleOp.BreachTeleOP.clawCloseSpecimen;
 import static TeleOp.BreachTeleOP.highSmallHingeSampleDeposit;
@@ -8,7 +8,7 @@ import static TeleOp.BreachTeleOP.intakeWheelSpeed;
 import static TeleOp.BreachTeleOP.largeHingeSampleIntake;
 import static TeleOp.BreachTeleOP.largeHingeSpecimenDeposit;
 import static TeleOp.BreachTeleOP.largeHingeSpecimenIntake;
-import static TeleOp.BreachTeleOP.largeHingeSpecimenScore;
+//import static TeleOp.BreachTeleOP.largeHingeSpecimenScore;
 import static TeleOp.BreachTeleOP.lowLargeHingeSpecimenScore;
 import static TeleOp.BreachTeleOP.lowSmallSpecimenScore;
 import static TeleOp.BreachTeleOP.sampleClawOpen;
@@ -199,3 +199,5 @@ public class Bot {
         return new AutoActions(action, a);
     }
 }
+*/
+
