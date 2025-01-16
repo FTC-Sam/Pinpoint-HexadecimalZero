@@ -63,7 +63,7 @@ public class PrepTeleOp extends LinearOpMode {
 
 
     private void initialize() {
-        bigHingeRight = (ServoImplEx) hardwareMap.servo.get("bigHingeRight");
+        /*bigHingeRight = (ServoImplEx) hardwareMap.servo.get("bigHingeRight");
         bigHingeLeft = (ServoImplEx) hardwareMap.servo.get("bigHingeLeft");
         bigHingeLeft.setDirection(ServoImplEx.Direction.REVERSE);
 
@@ -74,7 +74,7 @@ public class PrepTeleOp extends LinearOpMode {
         wrist = (ServoImplEx) hardwareMap.servo.get("wrist");
         claw = (ServoImplEx) hardwareMap.servo.get("claw");
 
-        crane = new Crane(hardwareMap, telemetry, gamepad1, gamepad2);
+        crane = new Crane(hardwareMap, telemetry, gamepad1, gamepad2);*/
 
         climb = (DcMotorEx) hardwareMap.dcMotor.get("climb");
         horiSlides = new HoriSlides(hardwareMap, telemetry);
