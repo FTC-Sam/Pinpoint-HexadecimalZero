@@ -1,4 +1,4 @@
-package mechanisms;
+package bot;
 
 import androidx.annotation.NonNull;
 
@@ -90,10 +90,10 @@ public class VertiSlides {
     }
 
     public void update() {
-//        telemetry.addData("SlideTop", slideTop.getCurrent(CurrentUnit.AMPS));
-//        telemetry.addData("SlideMid", slideMid.getCurrent(CurrentUnit.AMPS));
-//        telemetry.addData("SlideBot", slideBot.getCurrent(CurrentUnit.AMPS));
-//        telemetry.update();
+        telemetry.addData("SlideTop", slideTop.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("SlideMid", slideMid.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("SlideBot", slideBot.getCurrent(CurrentUnit.AMPS));
+        telemetry.update();
 
         int tolerance = 0;
 

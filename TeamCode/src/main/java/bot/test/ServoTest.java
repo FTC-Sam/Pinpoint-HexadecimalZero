@@ -1,4 +1,4 @@
-package mechanisms.test;
+package bot.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

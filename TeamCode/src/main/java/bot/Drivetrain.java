@@ -1,4 +1,4 @@
-package mechanisms;
+package bot;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;

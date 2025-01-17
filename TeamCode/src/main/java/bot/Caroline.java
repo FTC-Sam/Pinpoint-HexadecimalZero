@@ -1,4 +1,4 @@
-package mechanisms;
+package bot;
 
 import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.CRServo;

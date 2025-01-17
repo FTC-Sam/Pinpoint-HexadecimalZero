@@ -12,11 +12,26 @@ public class CloseAuto {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(50, 50, Math.toRadians(180), Math.toRadians(180), 15)
+                .setConstraints(70, 70, Math.toRadians(180), Math.toRadians(180), 12.5)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, Math.toRadians(180)))
-                .strafeToLinearHeading(new Vector2d(0, 30), Math.toRadians(180))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-9, -61, Math.toRadians(180)))
+                .strafeToLinearHeading(new Vector2d(-9, -50), Math.toRadians(180))
+                .strafeToLinearHeading(new Vector2d(-54, -54), Math.toRadians(225))
+
+                .strafeToLinearHeading(new Vector2d(-48, -45), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(-54, -54), Math.toRadians(225))
+
+                .strafeToLinearHeading(new Vector2d(-56, -45), Math.toRadians(275))
+                .strafeToLinearHeading(new Vector2d(-54, -54), Math.toRadians(225))
+
+                .strafeToLinearHeading(new Vector2d(-56, -45), Math.toRadians(295))
+                .strafeToLinearHeading(new Vector2d(-54, -54), Math.toRadians(225))
+
+
+
+
+
 
 
 

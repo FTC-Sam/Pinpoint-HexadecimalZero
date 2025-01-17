@@ -13,9 +13,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.PinpointDrive;
 
-import mechanisms.Intake;
-import mechanisms.HoriSlides;
-import mechanisms.VertiSlides;
+import bot.Intake;
+import bot.HoriSlides;
+import bot.VertiSlides;
 
 
 @Disabled

@@ -1,18 +1,16 @@
-package mechanisms;
-/*
-//import static TeleOp.BreachTeleOP.SmallHingeSpecimenDeposit;
+package bot;
+
+import static TeleOp.BreachTeleOP.lowLargeHingeSpecimenDeposit;
+import static TeleOp.BreachTeleOP.lowSmallHingeSpecimenDeposit;
+import static TeleOp.BreachTeleOP.smallHingeSpecimenDeposit;
 import static TeleOp.BreachTeleOP.clawCloseSample;
 import static TeleOp.BreachTeleOP.clawCloseSpecimen;
-import static TeleOp.BreachTeleOP.highSmallHingeSampleDeposit;
 import static TeleOp.BreachTeleOP.intakeWheelSpeed;
 import static TeleOp.BreachTeleOP.largeHingeSampleIntake;
-import static TeleOp.BreachTeleOP.largeHingeSpecimenDeposit;
 import static TeleOp.BreachTeleOP.largeHingeSpecimenIntake;
-//import static TeleOp.BreachTeleOP.largeHingeSpecimenScore;
 import static TeleOp.BreachTeleOP.lowLargeHingeSpecimenScore;
 import static TeleOp.BreachTeleOP.lowSmallSpecimenScore;
 import static TeleOp.BreachTeleOP.sampleClawOpen;
-import static TeleOp.BreachTeleOP.servoSlidesRetract;
 import static TeleOp.BreachTeleOP.smallHingeSampleIntake;
 import static TeleOp.BreachTeleOP.smallHingeSpecimenIntake;
 import static TeleOp.BreachTeleOP.specimenClawOpen;
@@ -56,6 +54,17 @@ public class Bot {
         slideServoLeft.setDirection(Servo.Direction.REVERSE);
         largeHingeServoLeft.setDirection(Servo.Direction.REVERSE);
         secondHingeServoLeft.setDirection(Servo.Direction.REVERSE);
+
+        moveSmallHinge(lowSmallHingeSpecimenDeposit);
+        largeHingeServoLeft.setPosition(lowLargeHingeSpecimenDeposit);
+        largeHingeServoRight.setPosition(lowLargeHingeSpecimenDeposit);
+        clawServo.setPosition(clawCloseSpecimen);
+        slideServoLeft.setPosition(0.5);
+        slideServoRight.setPosition(0.5);
+        wristServo.setPosition(.05);
+
+
+
     }
 
 
@@ -63,6 +72,7 @@ public class Bot {
     public enum AutoActionModes {
         SETSLIDE,
         DEPOSITPOS,
+        HALFDEPOSITPOS,
         DEPOSITHIGH,
         DEPOSITLOW,
         OPENCLAW,
@@ -114,6 +124,11 @@ public class Bot {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             switch (action) {
+                case HALFDEPOSITPOS:
+                    moveLargeHinge(0.9);
+                    moveHorizontalSlides(0.6);
+                    moveSmallHinge(smallHingeSpecimenDeposit);
+                    wristServo.setPosition(.772);
                 case OPENCLAW:
                     clawServo.setPosition(specimenClawOpen);
                     break;
@@ -125,16 +140,16 @@ public class Bot {
                     slideServoRight.setPosition(slidePos);
                     break;
                 case DEPOSITPOS:
-                    moveLargeHinge(largeHingeSpecimenDeposit);
-                    moveHorizontalSlides(servoSlidesRetract);
-                    moveLargeHinge(largeHingeSpecimenDeposit);
-                    moveSmallHinge(SmallHingeSpecimenDeposit);
-                    wristServo.setPosition(.772);
+                    moveHorizontalSlides(0.6);
+                    moveSmallHinge(lowSmallHingeSpecimenDeposit);
+                    largeHingeServoLeft.setPosition(lowLargeHingeSpecimenDeposit);
+                    largeHingeServoRight.setPosition(lowLargeHingeSpecimenDeposit);
+                    wristServo.setPosition(.755);
                     break;
                 case DEPOSITHIGH:
-                    largeHingeServoLeft.setPosition(largeHingeSpecimenScore);
-                    largeHingeServoRight.setPosition(largeHingeSpecimenScore);
-                    moveSmallHinge(highSmallHingeSampleDeposit);
+                    moveSmallHinge(lowSmallHingeSpecimenDeposit);
+                    largeHingeServoLeft.setPosition(0.75);
+                    largeHingeServoRight.setPosition(0.75);
                     break;
                 case DEPOSITLOW:
                     moveSmallHinge(lowSmallSpecimenScore);
@@ -145,7 +160,7 @@ public class Bot {
                     moveLargeHinge(.5);
                     moveSmallHinge(.5);
                     wristServo.setPosition(.05);
-                    moveHorizontalSlides(servoSlidesRetract);
+                    moveHorizontalSlides(0.6);
                     break;
                 case RUNINTAKE:
                     intakeServoLeft.setPower(-intakeWheelSpeed);
@@ -173,8 +188,8 @@ public class Bot {
                     wristServo.setPosition(.05);
                     break;
                 case SPECIALDEPOSIT:
-                    moveSmallHinge(.5);
-                    moveLargeHinge(.5);
+                    moveSmallHinge(.2);
+                    moveLargeHinge(.8);
                     wristServo.setPosition(.05);
                     break;
                 case HUMANDROP:
@@ -199,5 +214,5 @@ public class Bot {
         return new AutoActions(action, a);
     }
 }
-*/
+
 

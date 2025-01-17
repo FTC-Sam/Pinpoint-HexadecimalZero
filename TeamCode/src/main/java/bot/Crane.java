@@ -1,4 +1,4 @@
-package mechanisms;
+package bot;
 
 
 import com.acmerobotics.dashboard.config.Config;

@@ -1,7 +1,5 @@
 package TeleOp;
 
-import android.graphics.drawable.Drawable;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -9,14 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
-import mechanisms.Crane;
-import mechanisms.Drivetrain;
-import mechanisms.HoriSlides;
-import mechanisms.VertiSlides;
+import bot.Crane;
+import bot.Drivetrain;
+import bot.HoriSlides;
+import bot.VertiSlides;
 
 
 @TeleOp(name = "PrepTeleOp")
