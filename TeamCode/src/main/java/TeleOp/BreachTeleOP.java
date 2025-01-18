@@ -9,11 +9,16 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+
+import bot.VertiSlides;
+
 @TeleOp(name = "TeleV2")
 @Config
 public class BreachTeleOP extends LinearOpMode {
 
     // Declare variables for servos and CR servos
+    public VertiSlides vertiSlides;
+
 
     private Servo clawServo;
 
@@ -34,12 +39,12 @@ public class BreachTeleOP extends LinearOpMode {
     private DcMotor BR;
 
     // Declare tunable variables for servo positions and speeds
-    public static double servoSlidesRetract = 0.6;    //rough tuned
+    public static double servoSlidesRetract = 0.7;    //rough tuned
     public static double servoSlidesExtend = .25;       //rough tuned
 
 
-    public static double largeHingeSampleIntake = .3;   //rough tuned
-    public static double smallHingeSampleIntake = .71;    //rough tuned
+    public static double largeHingeSampleIntake = .38;   //rough tuned
+    public static double smallHingeSampleIntake = .65;    //rough tuned
 
 
     public static double largeHingeSpecimenIntake = 0.5;
@@ -73,9 +78,16 @@ public class BreachTeleOP extends LinearOpMode {
 
 
     public static double specimenClawOpen = .76;
-    public static double sampleClawOpen = .67;
+    public static double sampleClawOpen = .72;
     public static double clawCloseSample = .57;
     public static double clawCloseSpecimen = .5;
+
+
+    public static int slidesHighBucket=2000;
+
+    public static int slidesLowBucket=900;
+
+    public static int SlideDelayDuration=500;
 
 
     public static double intakeWheelSpeed = -1.0; // Range 0.0 to 1.0
@@ -88,6 +100,10 @@ public class BreachTeleOP extends LinearOpMode {
     private boolean clawClosed = true;
     private boolean isArmMoving=false;
     private boolean isDepositing=false;
+
+    private boolean justScored=false;
+
+    private boolean isDelaying;
     private boolean verticalSlidesFullExtended=false;
     //private boolean verticalSlidesFullExtended=false;
     Gamepad currentGamepad1 = new Gamepad();
@@ -97,9 +113,14 @@ public class BreachTeleOP extends LinearOpMode {
     Gamepad previousGamepad2 = new Gamepad();
     //goofy ahh motion pathing;
     ElapsedTime timer = new ElapsedTime();
+
+    ElapsedTime timerTwo = new ElapsedTime();
+    private ElapsedTime time1 = new ElapsedTime();
+    private boolean moveUp = false;
     double startPosition=0;
     double endPosition=0;
     long duration=0;
+    boolean isTopDown = false;
 
     @Override
     public void runOpMode() {
@@ -111,14 +132,27 @@ public class BreachTeleOP extends LinearOpMode {
             updateGamepads();
             RunDriveBase();
 
+            if(isDelaying)
+            {
+                delaySlides();
+            }
+
+            if(!previousGamepad2.a && currentGamepad2.a && !isTopDown) {
+                isTopDown = true;
+            }
+            else if (!previousGamepad2.a && currentGamepad2.a && isTopDown) {
+                isTopDown = false;
+            }
+
             //slide Extension
             if (currentGamepad1.b && !previousGamepad1.b&&!isDepositing) {
                 if (servoSlidesExtended) {
                     if (sampleMode) {
                         OpeningMove();
                     }
-                    if (specimenMode) {
+                    if (specimenMode&&clawClosed) {
                         specimenDeposit();
+
                     }
                     servoSlidesExtended = false;
                 } else {
@@ -135,19 +169,30 @@ public class BreachTeleOP extends LinearOpMode {
             if (currentGamepad1.dpad_up && !previousGamepad1.dpad_up) {
                 if (specimenMode) {
                     specimenDeposit();
+                    startDelaySlides(500);
                 }
                 if (sampleMode) {
                     sampleDeposit();
                 }
                 isDepositing=true;
             }
-            if (currentGamepad1.dpad_down && !previousGamepad1.dpad_down) {
+            if (currentGamepad1.dpad_down && !previousGamepad1.dpad_down)
+            {
+               // vertiSlides.setTargetPos(-40);
                 if (sampleMode) {
                     OpeningMove();
                     //lower slides
                 }
                 if (specimenMode)
                 {
+                    if(justScored)
+                    {
+                        clawServo.setPosition(specimenClawOpen);
+                        sleepNonBlocking(200);
+                        moveLargeHingeWithPathing(.5,2000);
+                        moveSmallHinge(.5);
+                        justScored=false;
+                    }
                     if(isDepositing) {
                         if (verticalSlidesFullExtended) {
                             scoreHighSpecimen();
@@ -155,10 +200,13 @@ public class BreachTeleOP extends LinearOpMode {
                             scoreLowSpecimen();
                         }
                         isDepositing = false;
+                        justScored=true;
                     }
+
 
                     else{
                         OpeningMove();
+
                     }
                 }
             }
@@ -174,7 +222,12 @@ public class BreachTeleOP extends LinearOpMode {
                 } else {
                     if (servoSlidesExtended) {
                         if (sampleMode) {
-                            sampleIntake();
+                            if (!isTopDown) {
+                                sampleIntakeSide();
+                            }
+                            else {
+                                sampleIntakeTop();
+                            }
                         } else if (specimenMode) {
                             specimenIntake();
                         }
@@ -216,23 +269,30 @@ public class BreachTeleOP extends LinearOpMode {
             {
                 if(servoSlidesExtended)
                 {
-                    moveHorizontalSlides(servoSlidesRetract);
+                    startDelaySlides(500);
                     servoSlidesExtended=false;
                 }
                 if(specimenMode)
                 {
                     moveLargeHingeWithPathing(lowLargeHingeSpecimenDeposit);
                     moveSmallHinge(lowSmallHingeSpecimenDeposit);
-                    wristServo.setPosition(.772);
                 }
                 if(sampleMode)
                 {
-                    moveLargeHingeWithPathing(highLargeHingeSampleDeposit);
-                    moveSmallHinge(highSmallHingeSampleDeposit);
+                    sampleDeposit();
+                   // vertiSlides.setTargetPos(slidesLowBucket);
                 }
                 isDepositing=true;
                 isIntaking = false;
             }
+
+            if(time1.seconds()>5 && moveUp) {
+                telemetry.addLine("Shits run");
+                moveHorizontalSlides(servoSlidesRetract);
+                moveUp = false;
+            }
+
+
 
 
             // Send telemetry data for debugging
@@ -245,17 +305,20 @@ public class BreachTeleOP extends LinearOpMode {
             telemetry.addData("IsIntaking", isIntaking);
             telemetry.addData("SlidesExtended", servoSlidesExtended);
             telemetry.addData("Claw Closed", clawClosed);
+            telemetry.addData("Top down: ",isTopDown);
+
             telemetry.update();
         }
     }
 
-    private void depositPosition() {
 
-    }
 
     // Method to move the large hinge to a specified position
     private void moveLargeHingeWithPathing(double position) {
         startArmMovement(largeHingeServoLeft.getPosition(), position, 1200);
+    }
+    private void moveLargeHingeWithPathing(double position,int duration) {
+        startArmMovement(largeHingeServoLeft.getPosition(), position, duration);
     }
     private void moveLargeHinge(double position) {
         largeHingeServoLeft.setPosition(position);
@@ -355,6 +418,7 @@ public class BreachTeleOP extends LinearOpMode {
     public void inizaltizeEverything() {
 
         // Initialize servos
+        vertiSlides = new VertiSlides(hardwareMap, this.telemetry);
         wristServo = hardwareMap.get(Servo.class, "wrist");
         slideServoLeft = hardwareMap.get(Servo.class, "servoLeft");
         slideServoRight = hardwareMap.get(Servo.class, "servoRight");
@@ -393,18 +457,32 @@ public class BreachTeleOP extends LinearOpMode {
     }
 
     public void OpeningMove() {
+
         moveLargeHinge(.5);
         moveSmallHinge(.5);
         wristServo.setPosition(.05);
         moveHorizontalSlides(servoSlidesRetract);
         isIntaking = false;
+
+
+
+
     }
 
-    public void sampleIntake() {
+    public void sampleIntakeSide() {
         moveSmallHinge(smallHingeSampleIntake);
         largeHingeServoLeft.setPosition(largeHingeSampleIntake);
         largeHingeServoRight.setPosition(largeHingeSampleIntake);
         isIntaking = true;
+        vertiSlides.setTargetPos(0);
+    }
+
+    public void sampleIntakeTop() {
+        moveSmallHinge(0);
+        largeHingeServoLeft.setPosition(0.5);
+        largeHingeServoRight.setPosition(0.5);
+        isIntaking = true;
+        vertiSlides.setTargetPos(0);
     }
 
     public void runIntake() {
@@ -427,7 +505,7 @@ public class BreachTeleOP extends LinearOpMode {
         intakeServoRight.setPower(0);
         clawServo.setPosition(clawCloseSample);
         clawClosed = true;
-        sampleClawOpen = .67;
+        sampleClawOpen = .7;
     }
 
     public void clawToggle() {
@@ -462,13 +540,18 @@ public class BreachTeleOP extends LinearOpMode {
 
     public void specimenDeposit() {
         if (clawClosed) {
-            moveLargeHingeWithPathing(largeHingeSpecimenDeposit);
-            moveSmallHinge(smallHingeSpecimenDeposit);
-            moveHorizontalSlides(servoSlidesRetract);
+            if(!moveUp) {
+                time1.reset();
+                moveLargeHingeWithPathing(largeHingeSpecimenDeposit);
+                moveSmallHinge(smallHingeSpecimenDeposit);
+                moveUp = true;
+            }
+
             servoSlidesExtended=false;
             isDepositing=true;
             isIntaking = false;
-            wristServo.setPosition(.772);
+
+            //moveHorizontalSlides(1);
         }
 
     }
@@ -479,6 +562,7 @@ public class BreachTeleOP extends LinearOpMode {
         moveSmallHinge(SmallHingeSampleDeposit);
         isIntaking = false;
         wristServo.setPosition(.772);
+      //  vertiSlides.setTargetPos(slidesHighBucket);
     }
 
     public void updateGamepads() {
@@ -496,6 +580,13 @@ public class BreachTeleOP extends LinearOpMode {
         startPosition=sP;
         endPosition=eP;
         duration=d;
+    }
+    private void startDelaySlides(int duration)
+    {
+        timerTwo.reset();
+        SlideDelayDuration=duration;
+        delaySlides();
+        isDelaying=true;
     }
     private void servoMoveWithPathing() {
 
@@ -528,6 +619,18 @@ public class BreachTeleOP extends LinearOpMode {
             largeHingeServoLeft.setPosition(endPosition);
         }
     }
+    private void delaySlides() {
+        // Loop until the duration has elapsed
+        if (timerTwo.milliseconds() < 500) {
+            sleepNonBlocking(50); // Custom non-blocking sleep function
+        } else {
+            // Ensure servo reaches the exact end position
+            isDelaying=false;
+            moveHorizontalSlides(servoSlidesRetract);
+            wristServo.setPosition(.772);
+        }
+    }
+
 
     // Cubic easing function for ease-out
     private double cubicEaseOut(double t) {

@@ -15,8 +15,8 @@ public class CloseAuto {
                 .setConstraints(70, 70, Math.toRadians(180), Math.toRadians(180), 12.5)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-9, -61, Math.toRadians(180)))
-                .strafeToLinearHeading(new Vector2d(-9, -50), Math.toRadians(180))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-35, -61, Math.toRadians(180)))
+                .strafeToLinearHeading(new Vector2d(-35, -50), Math.toRadians(180))
                 .strafeToLinearHeading(new Vector2d(-54, -54), Math.toRadians(225))
 
                 .strafeToLinearHeading(new Vector2d(-48, -45), Math.toRadians(270))

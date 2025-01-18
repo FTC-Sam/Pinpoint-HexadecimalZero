@@ -97,11 +97,11 @@ public class VertiSlides {
 
         int tolerance = 0;
 
-        if ((getCurrentPos() - targetPos) < -200) {
+        /*if ((getCurrentPos() - targetPos) < -200) {
             slideTop.setPower(1);
             slideMid.setPower(1);
             slideBot.setPower(1);
-        }
+        }*/
         if ((getCurrentPos() - targetPos) < -tolerance) {
             slideTop.setPower(returnPowerUp());
             slideMid.setPower(returnPowerUp());

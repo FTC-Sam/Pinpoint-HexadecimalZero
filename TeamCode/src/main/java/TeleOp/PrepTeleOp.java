@@ -6,8 +6,12 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
+
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import bot.Crane;
 import bot.Drivetrain;
@@ -29,6 +33,7 @@ public class PrepTeleOp extends LinearOpMode {
     private ServoImplEx servoLeft;
     private ServoImplEx servoRight;
     private VertiSlides vertiSlides;
+
     private HoriSlides horiSlides;
     private DcMotorEx climb;
 
@@ -53,6 +58,10 @@ public class PrepTeleOp extends LinearOpMode {
     public ServoImplEx claw;
     public Crane crane;
 
+    public DcMotorEx slideTop;
+    public DcMotorEx slideMid;
+    public DcMotorEx slideBot;
+
 
 
 
@@ -72,13 +81,37 @@ public class PrepTeleOp extends LinearOpMode {
 
         crane = new Crane(hardwareMap, telemetry, gamepad1, gamepad2);*/
 
-        climb = (DcMotorEx) hardwareMap.dcMotor.get("climb");
-        horiSlides = new HoriSlides(hardwareMap, telemetry);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
-        vertiSlides = new VertiSlides(hardwareMap, telemetry);
+
         drivetrain = new Drivetrain(hardwareMap, telemetry, gamepad1, crane);
+        slideTop = (DcMotorEx) hardwareMap.dcMotor.get("slideTop");
+        slideMid = (DcMotorEx) hardwareMap.dcMotor.get("slideMid");
+        slideBot = (DcMotorEx) hardwareMap.dcMotor.get("slideBot");
+        climb = (DcMotorEx) hardwareMap.dcMotor.get("climb");
+
+
+        slideTop.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        slideMid.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        slideBot.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        climb.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+        slideTop.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMid.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideBot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        climb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slideTop.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideMid.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        slideBot.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        climb.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        //climb.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
+
+        slideTop.setDirection(DcMotorSimple.Direction.REVERSE);
+        slideBot.setDirection(DcMotorSimple.Direction.REVERSE);// leave this be, nuh uh
     }
 
 
@@ -101,11 +134,22 @@ public class PrepTeleOp extends LinearOpMode {
             //0.431 rest
             */
             if (gamepad1.dpad_up) {
-                smallHingeRight.setPosition(servoIn);
-                smallHingeLeft.setPosition(servoIn);
-                bigHingeRight.setPosition(servoOut);
-                bigHingeLeft.setPosition(servoOut);
-            }/*
+                slideTop.setPower(1);
+                slideMid.setPower(1);
+                slideBot.setPower(1);
+                telemetry.addData("SlideTop", slideTop.getCurrent(CurrentUnit.AMPS));
+                telemetry.addData("SlideMid", slideMid.getCurrent(CurrentUnit.AMPS));
+                telemetry.addData("SlideBot", slideBot.getCurrent(CurrentUnit.AMPS));
+                telemetry.update();
+
+            }
+
+            else {
+                slideTop.setPower(0);
+                slideMid.setPower(0);
+                slideBot.setPower(0);
+            }
+            /*
             if (gamepad1.dpad_down) {
                 horiSlides.in();
             }

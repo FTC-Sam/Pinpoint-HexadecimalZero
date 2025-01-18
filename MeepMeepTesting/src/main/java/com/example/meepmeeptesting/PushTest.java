@@ -19,16 +19,14 @@ public class PushTest {
                 .strafeToLinearHeading(new Vector2d(9, -40), Math.toRadians(270))
                 .strafeToLinearHeading(new Vector2d(9, -44), Math.toRadians(270))
 
-                .strafeToLinearHeading(new Vector2d(27, -38), Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(40, 0, Math.toRadians(270)),Math.toRadians(320))
+                .strafeToLinearHeading(new Vector2d(35, -40), Math.toRadians(270))
 
-                .splineToLinearHeading(new Pose2d(45, -55, Math.toRadians(270)), Math.toRadians(270))
 
-                .strafeToLinearHeading(new Vector2d(46, -20), Math.toRadians(270))
-                .splineToLinearHeading(new Pose2d(51, 0, Math.toRadians(270)), Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(58, -10, Math.toRadians(270)), Math.toRadians(270))
-                .strafeToLinearHeading(new Vector2d(58, -55), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(40, -10), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(48, -55), Math.toRadians(270))
 
+                .strafeToLinearHeading(new Vector2d(48, -10), Math.toRadians(270))
+                .strafeToLinearHeading(new Vector2d(60, -55), Math.toRadians(270))
 
 
 
